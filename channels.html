@@ -65,11 +65,25 @@
             width: 100%;
             height: auto;
         }
+        .logo-text {
+            display: flex;
+            align-items: center;
+        }
+        .logo-text span {
+            margin-left: 10px;
+            font-size: 50px; /* Larger text */
+            font-weight: bold; /* Bold text */
+            color: rgba(47, 170, 96, 0.746); /* Green color */
+        }
+
     </style>
 </head>
 <body>
     <nav class="navbar">
-        <img src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png" alt="WeedTube Logo" onclick="window.location.href='home.html'">
+        <div class="logo-text">
+            <img src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png" alt="WeedTube Logo" onclick="window.location.href='home.html'">
+            <span>WeedTube</span>
+        </div>
         <div class="nav-links">
             <a href="home.html">Home</a>
             <a href="channels.html">Channels</a>
@@ -78,7 +92,6 @@
         </div>
     </nav>
 
-    </div>
     <div class="content">
         <div class="channel" onclick="location.href='./channels/channel1/channel1.html'">
             <h2>Smokin Scope Studios - OkieSmokey420</h2>
@@ -87,7 +100,7 @@
         </div>
 
         <div class="channel" onclick="location.href='./channels/channel2/channel2.html'">
-            <h2>Techno's Game Club : Wambo</h2>
+            <h2>Techno's Game Club - Wambo</h2>
             <img src="./Assets/Images/channel2.png" alt="Channel 2">
             <p>If you Like Cannabis & Video Games or PC Then Look no Further as this is the channel for you.</p>
         </div>
@@ -97,7 +110,7 @@
             <img src="./Assets/Images/channel3.png" alt="Channel 3">
             <p>Info about channel</p>
         </div>
+        -->
     </div>
--->
 </body>
 </html>

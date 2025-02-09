@@ -60,12 +60,25 @@
         .content {
             padding: 20px;
         }
+        .logo-text {
+            display: flex;
+            align-items: center;
+        }
+        .logo-text span {
+            margin-left: 10px;
+            font-size: 50px; /* Larger text */
+            font-weight: bold; /* Bold text */
+            color: rgba(47, 170, 96, 0.746); /* Green color */
+        }
     </style>
 </head>
 <body>
     <nav class="navbar">
-        <img src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png" alt="WeedTube Logo" onclick="window.location.href='home.html'">
-        <div class="nav-links">
+        <div class="logo-text">
+            <img src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png" alt="WeedTube Logo" onclick="window.location.href='home.html'">
+            <span>WeedTube</span>
+        </div>
+    <div class="nav-links">
             <a href="home.html">Home</a>
             <a href="channels.html">Channels</a>
             <a href="updates.html">Updates</a>
