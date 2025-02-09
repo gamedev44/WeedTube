@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeedTube - Playlists</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #111;
+            padding: 15px 20px;
+        }
+
+        .navbar img {
+            width: 120px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .navbar img:hover {
+            opacity: 0.8;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #333;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: #555;
+        }
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+        .playlist {
+            margin-bottom: 30px;
+        }
+        iframe {
+            width: 100%;
+            max-width: 800px;
+            height: 450px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <img src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png" alt="WeedTube Logo" onclick="window.location.href='home.html'">
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="channels.html">Channels</a>
+            <a href="updates.html">Updates</a>
+            <a href="news.html">News</a>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="playlist" id="channel1">
+            <h2>Channel 1 - Creator Name</h2>
+            <iframe src="https://www.youtube.com/embed/videoseries?list=CHANNEL1_PLAYLIST_ID" allowfullscreen></iframe>
+        </div>
+        <div class="playlist" id="channel2">
+            <h2>Channel 2 - Creator Name</h2>
+            <iframe src="https://www.youtube.com/embed/videoseries?list=CHANNEL2_PLAYLIST_ID" allowfullscreen></iframe>
+        </div>
+        <div class="playlist" id="channel3">
+            <h2>Channel 3 - Creator Name</h2>
+            <iframe src="https://www.youtube.com/embed/videoseries?list=CHANNEL3_PLAYLIST_ID" allowfullscreen></iframe>
+        </div>
+    </div>
+</body>
+</html>

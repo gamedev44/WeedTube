@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeedTube - News</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #111;
+            padding: 15px 20px;
+        }
+
+        .navbar img {
+            width: 120px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .navbar img:hover {
+            opacity: 0.8;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #333;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: #555;
+        }
+        .content {
+            width: 80%;
+            margin-top: 20px;
+        }
+        .news-item {
+            border-bottom: 1px solid #ddd;
+            padding: 15px 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .news-item img {
+            width: 100px;
+            height: auto;
+            margin-bottom: 10px; /* Space below the image */
+        }
+        .news-item h2 {
+            margin: 0 0 10px 0; /* Space below headline */
+        }
+        .news-item p {
+            margin: 0; /* Reset margin */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <img src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png" alt="WeedTube Logo" onclick="window.location.href='home.html'">
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="channels.html">Channels</a>
+            <a href="updates.html">Updates</a>
+            <a href="news.html">News</a>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="news-item">
+            <h2>Headline 1</h2>
+            <img src="news-placeholder.jpg" alt="News Image">
+            <p>Short description of the news article. More details to come.</p>
+        </div>
+        <div class="news-item">
+            <h2>Headline 2</h2>
+            <img src="news-placeholder.jpg" alt="News Image">
+            <p>Short description of the news article. More details to come.</p>
+        </div>
+        <div class="news-item">
+            <h2>Headline 3</h2>
+            <img src="news-placeholder.jpg" alt="News Image">
+            <p>Short description of the news article. More details to come.</p>
+        </div>
+    </div>
+</body>
+</html>

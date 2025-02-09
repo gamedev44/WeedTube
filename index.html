@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="WeedTube - A Platform for Channels, News, and Playlists">
+    <meta name="keywords" content="WeedTube, Videos, Channels, News, Updates, Playlists">
+    <meta name="author" content="WeedTube">
+    <title>WeedTube</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .logo-container {
+            position: absolute;
+            opacity: 0;
+            animation: fadeIn 3s forwards, fadeOut 3s 5s forwards;
+        }
+
+        .logo-container img {
+            width: 60vw;
+            max-width: 500px;
+            height: auto;
+            filter: drop-shadow(0px 0px 20px #ffffff);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <img src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png" alt="WeedTube Logo">
+    </div>
+
+    <script>
+        setTimeout(() => {
+            window.location.href = "home.html";
+        }, 8000);
+    </script>
+</body>
+</html>
