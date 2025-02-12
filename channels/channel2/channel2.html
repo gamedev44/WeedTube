@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WeedTube - seasons</title>
+    <title>WeedTube - Seasons</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,22 +19,18 @@
             background: #111;
             padding: 15px 20px;
         }
-
         .navbar img {
             width: 120px;
             cursor: pointer;
             transition: opacity 0.3s;
         }
-
         .navbar img:hover {
             opacity: 0.8;
         }
-
         .nav-links {
             display: flex;
             gap: 15px;
         }
-
         .nav-links a {
             color: white;
             text-decoration: none;
@@ -43,7 +39,6 @@
             border-radius: 5px;
             transition: background 0.3s;
         }
-
         .nav-links a:hover {
             background: #555;
         }
@@ -51,12 +46,23 @@
             padding: 20px;
             text-align: center;
         }
-        .season {
-            margin-bottom: 30px;
+        .stream-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .stream {
+            width: 800px;
+            max-width: 100%;
+        }
+        .chat {
+            width: 350px;
+            max-width: 100%;
         }
         iframe {
             width: 100%;
-            max-width: 800px;
             height: 450px;
             border: none;
         }
@@ -66,9 +72,9 @@
         }
         .logo-text span {
             margin-left: 10px;
-            font-size: 50px; /* Larger text */
-            font-weight: bold; /* Bold text */
-            color: rgba(47, 170, 96, 0.746); /* Green color */
+            font-size: 50px;
+            font-weight: bold;
+            color: rgba(47, 170, 96, 0.746);
         }
     </style>
 </head>
@@ -90,9 +96,16 @@
         <div class="season" id="channel1">
             <h1>Live Stream</h1>
             <h2> Techno's Game Club : Wambo</h2>
-            <iframe src="https://player.twitch.tv/?channel=thewambolonian1776&parent=gamedev44.github.io" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>
-        </div>
-       <!-- <div class="season" id="season2">
+            <div class="stream-container">
+                <!-- Twitch Player -->
+                <div class="stream">
+                    <iframe src="https://player.twitch.tv/?channel=thewambolonian1776&parent=gamedev44.github.io" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>
+                </div>
+                <!-- Twitch Chat -->
+                <div class="chat">
+                    <iframe id="chat_embed" src="https://www.twitch.tv/embed/thewambolonian1776/chat?parent=gamedev44.github.io" height="500"></iframe>
+                </div>
+                <!-- <div class="season" id="season2">
             <h1>Season 2</h1>
             <h2>Smokin Scope Studios - OkieSmokey420</h2>
             <iframe src="" allowfullscreen></iframe>
@@ -103,5 +116,8 @@
             <iframe src="" allowfullscreen></iframe>
         </div>
     </div> -->
+            </div>
+        </div>
+    </div>
 </body>
 </html>
