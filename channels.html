@@ -1,116 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WeedTube - Channels</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-        }
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #111;
-            padding: 15px 20px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WeedTube - Channels</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      background: #121212;
+      color: #eee;
+    }
 
-        .navbar img {
-            width: 120px;
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #111;
+      padding: 15px 20px;
+    }
 
-        .navbar img:hover {
-            opacity: 0.8;
-        }
+    .navbar img {
+      width: 120px;
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
 
-        .nav-links {
-            display: flex;
-            gap: 15px;
-        }
+    .navbar img:hover {
+      opacity: 0.8;
+    }
 
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 15px;
-            background: #333;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
+    .nav-links {
+      display: flex;
+      gap: 15px;
+    }
 
-        .nav-links a:hover {
-            background: #555;
-        }
-        .content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 20px;
-        }
-        .channel {
-            width: 300px;
-            border: 1px solid #ddd;
-            margin: 10px;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-        }
-        .channel img {
-            width: 100%;
-            height: auto;
-        }
-        .logo-text {
-            display: flex;
-            align-items: center;
-        }
-        .logo-text span {
-            margin-left: 10px;
-            font-size: 50px; /* Larger text */
-            font-weight: bold; /* Bold text */
-            color: rgba(47, 170, 96, 0.746); /* Green color */
-        }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 15px;
+      background: #333;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
 
-    </style>
+    .nav-links a:hover {
+      background: #555;
+    }
+
+    .content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 40px 20px;
+      gap: 20px;
+    }
+
+    .channel {
+      width: 320px;
+      background: #1e1e1e;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      transition: transform 0.2s;
+    }
+
+    .channel:hover {
+      transform: scale(1.02);
+    }
+
+    .channel img {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .channel h2 {
+      color: #a0ffa0;
+      margin-bottom: 10px;
+    }
+
+    .channel p {
+      margin-bottom: 15px;
+    }
+
+    .discord-link {
+      display: inline-block;
+      padding: 10px 15px;
+      background: #5865F2;
+      color: #fff;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .discord-link:hover {
+      background: #4752c4;
+    }
+
+    .logo-text {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-text span {
+      margin-left: 10px;
+      font-size: 50px;
+      font-weight: bold;
+      color: rgba(47, 170, 96, 0.746);
+    }
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo-text">
-            <img src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png" alt="WeedTube Logo" onclick="window.location.href='home.html'">
-            <span>WeedTube</span>
-        </div>
-        <div class="nav-links">
-            <a href="home.html">Home</a>
-            <a href="channels.html">Channels</a>
-            <a href="updates.html">Updates</a>
-            <a href="news.html">News</a>
-        </div>
-    </nav>
-
-    <div class="content">
-        <div class="channel" onclick="location.href='./channels/channel1/channel1.html'">
-            <h2>Smokin Scope Studios - OkieSmokey420</h2>
-            <img src="./Assets/Images/channel1.png" alt="Channel 1">
-            <p>Cannabis Entertainment Show Host:OkieSmokey420.</p>
-        </div>
-
-        <div class="channel" onclick="location.href='./channels/channel2/channel2.html'">
-            <h2>Techno's Game Club - Wambo</h2>
-            <img src="./Assets/Images/channel2.png" alt="Channel 2">
-            <p>If you Like Cannabis & Video Games or PC Then Look no Further as this is the channel for you.</p>
-        </div>
-        <!--
-        <div class="channel" onclick="location.href='./channels/channel1/channel3.html'">
-            <h2>Channel 3 : Creator Name</h2>
-            <img src="./Assets/Images/channel3.png" alt="Channel 3">
-            <p>Info about channel</p>
-        </div>
-        -->
+  <nav class="navbar">
+    <div class="logo-text">
+      <img src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png" alt="WeedTube Logo" onclick="window.location.href='home.html'">
+      <span>WeedTube</span>
     </div>
+    <div class="nav-links">
+      <a href="home.html">Home</a>
+      <a href="channels.html">Channels</a>
+      <a href="updates.html">Updates</a>
+      <a href="news.html">News</a>
+    </div>
+  </nav>
+
+  <div class="content">
+    <div class="channel" onclick="location.href='./channels/channel1/channel1.html'">
+      <h2>Smokin Scope Studios - OkieSmokey420</h2>
+      <img src="./Assets/Images/channel1.png" alt="Channel 1">
+      <p>Smoke sessions, dev updates, shoutouts, and the occasional big party stream — Brought to you all from the 405.</p>
+      <a class="discord-link" href="https://discord.gg/tZ9ChQbKBT" target="_blank">Join Discord</a>
+    </div>
+  
+
+    <div class="channel" onclick="location.href='./channels/channel2/channel2.html'">
+      <h2>Techno's Game Club - Wambo</h2>
+      <img src="./Assets/Images/channel2.png" alt="Channel 2">
+      <p>If you like cannabis & video games or PC building, Then this is your spot.</p>
+      <a class="discord-link" href="https://discord.gg/7MRVVxcUa7" target="_blank">Join Discord</a>
+    </div>
+
+    <!--
+    <div class="channel" onclick="location.href='./channels/channel3/channel3.html'">
+      <h2>Channel 3 : Creator Name</h2>
+      <img src="./Assets/Images/channel3.png" alt="Channel 3">
+      <a class="discord-link" href="https://discord.gg/YOUR_LINK_2" target="_blank">Join Discord</a>
+      <p>Info about channel</p>
+    </div>
+    -->
+  </div>
 </body>
 </html>

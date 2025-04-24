@@ -1,115 +1,292 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WeedTube - News</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-        }
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #111;
-            padding: 15px 20px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WeedTube - News</title>
+  <style>
+    :root {
+      --img-shrink-percentage: 50%;
+      --img-expand-percentage: 150%;
+    }
 
-        .navbar img {
-            width: 120px;
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      background: #121212;
+      color: #eee;
+    }
 
-        .navbar img:hover {
-            opacity: 0.8;
-        }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #111;
+      padding: 15px 20px;
+    }
 
-        .nav-links {
-            display: flex;
-            gap: 15px;
-        }
+    .navbar img {
+      width: 120px;
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
 
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 15px;
-            background: #333;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
+    .navbar img:hover {
+      opacity: 0.8;
+    }
 
-        .nav-links a:hover {
-            background: #555;
-        }
-        .content {
-            width: 80%;
-            margin-top: 20px;
-        }
-        .news-item {
-            border-bottom: 1px solid #ddd;
-            padding: 15px 0;
-            display: flex;
-            flex-direction: column;
-        }
-        .news-item img {
-            width: 100px;
-            height: auto;
-            margin-bottom: 10px; /* Space below the image */
-        }
-        .news-item h2 {
-            margin: 0 0 10px 0; /* Space below headline */
-        }
-        .news-item p {
-            margin: 0; /* Reset margin */
-        }
-        .logo-text {
-            display: flex;
-            align-items: center;
-        }
-        .logo-text span {
-            margin-left: 10px;
-            font-size: 50px; /* Larger text */
-            font-weight: bold; /* Bold text */
-            color: rgba(47, 170, 96, 0.746); /* Green color */
-        }
-    </style>
+    .nav-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 15px;
+      background: #333;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+
+    .nav-links a:hover {
+      background: #555;
+    }
+
+    .logo-text {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-text span {
+      margin-left: 10px;
+      font-size: 50px;
+      font-weight: bold;
+      color: rgba(47, 170, 96, 0.746);
+    }
+
+    .content {
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    details {
+      margin-bottom: 40px;
+      background: #1e1e1e;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    summary {
+      font-size: 24px;
+      cursor: pointer;
+      color: #a0ffa0;
+      margin-bottom: 10px;
+    }
+
+    .issue {
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: stretch;
+      gap: 30px;
+      margin-bottom: 60px;
+      flex-wrap: wrap;
+    }
+
+    .img-container {
+  width: var(--img-shrink-percentage);
+  max-width: none;
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.4);
+  transition: width 0.3s ease-in-out, transform 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.img-container.expanded-container {
+  width: var(--img-expand-percentage);
+}
+
+.img-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+
+    .expand-toggle {
+      margin-top: 10px;
+      padding: 5px 12px;
+      font-size: 14px;
+      background: #333;
+      color: #a0ffa0;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .giscus-wrapper {
+      flex: 1;
+      min-width: 300px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .discussion-title {
+      font-size: 22px;
+      margin-bottom: 5px;
+      color: #a0ffa0;
+    }
+
+    .giscus-header {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #eee;
+    }
+
+    @media (max-width: 768px) {
+      .issue {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      summary {
+        font-size: 20px;
+      }
+    }
+  </style>
+  <script>
+    function toggleImageSize(btn) {
+      const container = btn.parentElement;
+      const expanded = container.classList.toggle('expanded-container');
+      btn.textContent = expanded ? 'Shrink' : 'Expand';
+    }
+  </script>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo-text">
-            <img src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png" alt="WeedTube Logo" onclick="window.location.href='home.html'">
-            <span>WeedTube</span>
-        </div>
-        <div class="nav-links">
-            <a href="home.html">Home</a>
-            <a href="channels.html">Channels</a>
-            <a href="updates.html">Updates</a>
-            <a href="news.html">News</a>
-        </div>
-    </nav>
-
-    <div class="content">
-        <div class="news-item">
-            <h2>Headline 1</h2>
-            <img src="news-placeholder.jpg" alt="News Image">
-            <p>Short description of the news article. More details to come.</p>
-        </div>
-        <div class="news-item">
-            <h2>Headline 2</h2>
-            <img src="news-placeholder.jpg" alt="News Image">
-            <p>Short description of the news article. More details to come.</p>
-        </div>
-        <div class="news-item">
-            <h2>Headline 3</h2>
-            <img src="news-placeholder.jpg" alt="News Image">
-            <p>Short description of the news article. More details to come.</p>
-        </div>
+  <nav class="navbar">
+    <div class="logo-text">
+      <img src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png" alt="WeedTube Logo" onclick="window.location.href='home.html'">
+      <span>WeedTube</span>
     </div>
+    <div class="nav-links">
+      <a href="home.html">Home</a>
+      <a href="channels.html">Channels</a>
+      <a href="updates.html">Updates</a>
+      <a href="news.html">News</a>
+    </div>
+  </nav>
+
+  <div class="content">
+    <details>
+      <summary>📰 Volume 1: Issues 1–5</summary>
+
+      <!-- Issue 1 -->
+      <div class="issue">
+        <div class="img-container">
+          <img src="Assets/Articles/Volume1_Issues1-5/issue1.PNG" alt="Issue 1">
+          <button class="expand-toggle" onclick="toggleImageSize(this)">Expand</button>
+        </div>
+        <div class="giscus-wrapper">
+          <div class="discussion-title">🗪 Discussion</div>
+          <div class="giscus-header">💬 Discussion Board</div>
+          <script src="https://giscus.app/client.js"
+                  data-repo="gamedev44/WeedTube"
+                  data-repo-id="R_kgDON214Dw"
+                  data-category="Discussions"
+                  data-category-id="DIC_kwDON214D84CpZNy"
+                  data-mapping="pathname"
+                  data-term="vol1-issue1"
+                  data-strict="0"
+                  data-reactions-enabled="1"
+                  data-emit-metadata="0"
+                  data-input-position="top"
+                  data-theme="dark_high_contrast"
+                  data-lang="en"
+                  crossorigin="anonymous"
+                  async></script>
+        </div>
+      </div>
+
+      <!-- Issue 2 (commented out) -->
+      <!--
+      <div class="issue">
+        <div class="img-container">
+          <img src="Assets/Articles/Volume1_Issues1-5/issue2.PNG" alt="Issue 2">
+          <button class="expand-toggle" onclick="toggleImageSize(this)">Expand</button>
+        </div>
+        <div class="giscus-wrapper">
+          <div class="discussion-title">🗪 Discussion</div>
+          <div class="giscus-header">💬 Discussion Board</div>
+          <script src="https://giscus.app/client.js"
+                  data-repo="gamedev44/WeedTube"
+                  data-repo-id="R_kgDON214Dw"
+                  data-category="Discussions"
+                  data-category-id="DIC_kwDON214D84CpZNy"
+                  data-mapping="pathname"
+                  data-term="vol1-issue2"
+                  data-strict="0"
+                  data-reactions-enabled="1"
+                  data-emit-metadata="0"
+                  data-input-position="top"
+                  data-theme="dark_high_contrast"
+                  data-lang="en"
+                  crossorigin="anonymous"
+                  async></script>
+        </div>
+      </div>
+      -->
+
+      <!-- Issue 5 (commented out) -->
+      <!--
+      <div class="issue">
+        <div class="img-container">
+          <img src="Assets/Articles/Volume1_Issues1-5/issue5.PNG" alt="Issue 5">
+          <button class="expand-toggle" onclick="toggleImageSize(this)">Expand</button>
+        </div>
+        <div class="giscus-wrapper">
+          <div class="discussion-title">🗪 Discussion</div>
+          <div class="giscus-header">💬 Discussion Board</div>
+          <script src="https://giscus.app/client.js"
+                  data-repo="gamedev44/WeedTube"
+                  data-repo-id="R_kgDON214Dw"
+                  data-category="Discussions"
+                  data-category-id="DIC_kwDON214D84CpZNy"
+                  data-mapping="pathname"
+                  data-term="vol1-issue5"
+                  data-strict="0"
+                  data-reactions-enabled="1"
+                  data-emit-metadata="0"
+                  data-input-position="top"
+                  data-theme="dark_high_contrast"
+                  data-lang="en"
+                  crossorigin="anonymous"
+                  async></script>
+        </div>
+      </div>
+      -->
+
+    </details>
+
+    <!-- Volume 2 placeholder (commented out)
+    <details>
+      <summary>📰 Volume 1: Issues 6–10</summary>
+      <!-copy issue blocks here, adjust paths to Assets/Articles/Volume1_Issues6-10/issueX.PNG -->
+    </details>
+    
+
+  </div>
 </body>
 </html>

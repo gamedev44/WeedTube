@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WeedTube - Seasons</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WeedTube - Live Stream</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,6 +11,8 @@
             padding: 0;
             display: flex;
             flex-direction: column;
+            background: #121212;
+            color: #eee;
         }
         .navbar {
             display: flex;
@@ -43,22 +45,44 @@
             background: #555;
         }
         .content {
-            padding: 20px;
-            text-align: center;
+            padding: 40px 20px;
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        .season {
+            margin-bottom: 60px;
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .season h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        .season h2 {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: #a0ffa0;
         }
         .stream-container {
             display: flex;
-            flex-direction: row;
-            justify-content: center;
-            gap: 10px;
             flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .stream, .chat {
+            background: #111;
+            border-radius: 8px;
+            overflow: hidden;
         }
         .stream {
-            width: 800px;
+            flex: 1 1 620px;
             max-width: 100%;
         }
         .chat {
-            width: 350px;
+            flex: 0 1 350px;
             max-width: 100%;
         }
         iframe {
@@ -76,12 +100,22 @@
             font-weight: bold;
             color: rgba(47, 170, 96, 0.746);
         }
+        @media (max-width: 768px) {
+            .season {
+                padding: 20px;
+            }
+            iframe {
+                height: 280px;
+            }
+        }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="logo-text">
-            <img src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png" alt="WeedTube Logo" onclick="window.location.href='./home.html'">
+            <img src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png"
+                 alt="WeedTube Logo"
+                 onclick="window.location.href='./home.html'">
             <span>WeedTube</span>
         </div>
         <div class="nav-links">
@@ -93,29 +127,43 @@
     </nav>
 
     <div class="content">
-        <div class="season" id="channel1">
+        <div class="season" id="liveStream">
             <h1>Live Stream</h1>
-            <h2> Techno's Game Club : Wambo</h2>
+            <h2>Techno's Game Club : Wambo</h2>
             <div class="stream-container">
-                <!-- Twitch Player -->
                 <div class="stream">
-                    <iframe src="https://player.twitch.tv/?channel=thewambolonian1776&parent=gamedev44.github.io" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>
+                    <iframe
+                      src="https://player.twitch.tv/?channel=technoconqueror&parent=gamedev44.github.io"
+                      allowfullscreen="true"
+                      scrolling="no">
+                    </iframe>
                 </div>
-                <!-- Twitch Chat -->
                 <div class="chat">
-                    <iframe id="chat_embed" src="https://www.twitch.tv/embed/thewambolonian1776/chat?parent=gamedev44.github.io" height="500"></iframe>
+                    <iframe
+                      src="https://www.twitch.tv/embed/technoconqueror/chat?parent=gamedev44.github.io"
+                      height="500">
+                    </iframe>
                 </div>
-                <!-- <div class="season" id="season2">
-            <h1>Season 2</h1>
-            <h2>Smokin Scope Studios - OkieSmokey420</h2>
-            <iframe src="" allowfullscreen></iframe>
-        </div>
-        <div class="season" id="season3">
-            <h1>Season 3</h1>
-            <h2>Smokin Scope Studios - OkieSmokey420</h2>
-            <iframe src="" allowfullscreen></iframe>
-        </div>
-    </div> -->
+            </div>
+
+            <!-- Giscus comments section -->
+            <div style="margin-top: 60px; max-width: 1152px;">
+                <script src="https://giscus.app/client.js"
+                        data-repo="gamedev44/WeedTube"
+                        data-repo-id="R_kgDON214Dw"
+                        data-category="Comments"
+                        data-category-id="DIC_kwDON214D84CpZKZ"
+                        data-mapping="pathname"
+                        data-strict="0"
+                        data-reactions-enabled="1"
+                        data-emit-metadata="0"
+                        data-input-position="top"
+                        data-theme="dark_high_contrast"
+                        data-lang="en"
+                        crossorigin="anonymous"
+                        async>
+                </script>
+                <noscript>Please enable JavaScript to view the comments powered by Giscus.</noscript>
             </div>
         </div>
     </div>

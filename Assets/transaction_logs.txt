@@ -1,0 +1,38 @@
+Order #: 0001
+Date: 4/17/2025, 2:48:15 AM
+Cashier: 
+Items:
+ MKP001 - Womens Makeup - $1.00 (Qty: 1)
+Total: $1.28
+Payment: $5.00
+Change Received: $3.72
+---------------------------------
+Order #: 0001
+Date: 4/17/2025, 2:50:15 AM
+Cashier: Asterisk
+Items:
+ MKP001 - Womens Makeup - $1.00 (Qty: 1)
+Total: $1.28
+Payment: $5.00
+Change Received: $3.72
+---------------------------------
+Order #: 0001
+Date: 4/17/2025, 2:50:49 AM
+Cashier: Asterisk
+Items:
+ MKP001 - Womens Makeup - $1.00 (Qty: 1)
+Total: $1.28
+Payment: $5.00
+Change Received: $3.72
+---------------------------------
+Order #: 0001
+Date: 4/17/2025, 2:50:54 AM
+Cashier: Asterisk
+Items:
+ MKP002 - Womens Eyeshadow - $0.50 (Qty: 1)
+Total: $0.64
+Payment: $2.00
+Change Received: $1.36
+---------------------------------
+
+Total Sales: $4.48

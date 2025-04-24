@@ -1,107 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WeedTube - seasons</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-        }
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #111;
-            padding: 15px 20px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WeedTube - seasons</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      background: #121212;
+      color: #eee;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #111;
+      padding: 15px 20px;
+    }
+    .navbar img {
+      width: 120px;
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
+    .navbar img:hover {
+      opacity: 0.8;
+    }
+    .nav-links {
+      display: flex;
+      gap: 15px;
+    }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 15px;
+      background: #333;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    .nav-links a:hover {
+      background: #555;
+    }
+    .content {
+      padding: 40px 20px;
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .season {
+      margin-bottom: 60px;
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    .season h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    .season h2 {
+      font-size: 20px;
+      margin-bottom: 25px;
+      color: #a0ffa0;
+    }
+    iframe {
+      width: 100%;
+      max-width: 1152px;
+      height: 648px;
+      border: none;
+      border-radius: 8px;
+    }
+    .logo-text {
+      display: flex;
+      align-items: center;
+    }
+    .logo-text span {
+      margin-left: 10px;
+      font-size: 50px;
+      font-weight: bold;
+      color: rgba(47, 170, 96, 0.746);
+    }
 
-        .navbar img {
-            width: 120px;
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
-
-        .navbar img:hover {
-            opacity: 0.8;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 15px;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 15px;
-            background: #333;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-
-        .nav-links a:hover {
-            background: #555;
-        }
-        .content {
-            padding: 20px;
-            text-align: center;
-        }
-        .season {
-            margin-bottom: 30px;
-        }
-        iframe {
-            width: 100%;
-            max-width: 800px;
-            height: 450px;
-            border: none;
-        }
-        .logo-text {
-            display: flex;
-            align-items: center;
-        }
-        .logo-text span {
-            margin-left: 10px;
-            font-size: 50px; /* Larger text */
-            font-weight: bold; /* Bold text */
-            color: rgba(47, 170, 96, 0.746); /* Green color */
-        }
-    </style>
+    /* Responsive overrides */
+    @media (max-width: 768px) {
+      iframe {
+        height: 320px;
+      }
+      .season {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo-text">
-            <img src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png" alt="WeedTube Logo" onclick="window.location.href='./home.html'">
-            <span>WeedTube</span>
-        </div>
-        <div class="nav-links">
-            <a href="../../home.html">Home</a>
-            <a href="../../channels.html">Channels</a>
-            <a href="../../updates.html">Updates</a>
-            <a href="../../news.html">News</a>
-        </div>
-    </nav>
+  <nav class="navbar">
+    <div class="logo-text">
+      <img src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png" alt="WeedTube Logo" onclick="window.location.href='./home.html'">
+      <span>WeedTube</span>
+    </div>
+    <div class="nav-links">
+      <a href="../../home.html">Home</a>
+      <a href="../../channels.html">Channels</a>
+      <a href="../../updates.html">Updates</a>
+      <a href="../../news.html">News</a>
+    </div>
+  </nav>
 
-    <div class="content">
-        <div class="season" id="channel1">
-            <h1>Season 1</h1>
-            <h2> Smokin Scope Studios - OkieSmokey420</h2>
-            <iframe class="rumble" width="640" height="360" src="https://rumble.com/embed/v6gmoej/?pub=4j237g" frameborder="0" allowfullscreen></iframe>        </div>
-            </div>
-       <!-- <div class="season" id="season2">
-            <h1>Season 2</h1>
-            <h2>Smokin Scope Studios - OkieSmokey420</h2>
-            <iframe src="" allowfullscreen></iframe>
-        </div>
-        <div class="season" id="season3">
-            <h1>Season 3</h1>
-            <h2>Smokin Scope Studios - OkieSmokey420</h2>
-            <iframe src="" allowfullscreen></iframe>
-        </div>
-    </div> -->
+  <div class="content">
+    <div class="season" id="channel1">
+      <h1>Season 1</h1>
+      <h2>Smokin Scope Studios - OkieSmokey420</h2>
+      <iframe src="https://rumble.com/embed/v6gmoej/?pub=4j237g" allowfullscreen></iframe>
+
+      <!-- Giscus comments section -->
+      <div style="margin-top: 60px; max-width: 1152px;">
+        <script src="https://giscus.app/client.js"
+                data-repo="gamedev44/WeedTube"
+                data-repo-id="R_kgDON214Dw"
+                data-category="Comments"
+                data-category-id="DIC_kwDON214D84CpZKZ"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="top"
+                data-theme="dark_high_contrast"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+        <noscript>Please enable JavaScript to view the comments powered by Giscus.</noscript>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
