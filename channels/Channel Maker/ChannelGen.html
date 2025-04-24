@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+      
+        <!-- SEO -->
+        <meta name="description" content="Weedtuber Channel Creator App — Generate, customize, and download your channel pages with live preview.">
+        <meta name="keywords" content="Weedtuber, channel creator, HTML generator, live preview, page generator">
+        <meta name="author" content="Asterisk">
+      
+        <!-- Open Graph -->
+        <meta property="og:title" content="Weedtuber Channel Creator App">
+        <meta property="og:description" content="Generate custom WeedTube channel pages with live preview and one-click download.">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+      
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Weedtuber Channel Creator App">
+        <meta name="twitter:description" content="Generate custom WeedTube channel pages with live preview and one-click download.">
+        <meta name="twitter:image" content="">
+      
+        <!-- Theme -->
+        <meta name="theme-color" content="#1b1b1b">
+      
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+        <link rel="manifest" href="/favicons/site.webmanifest">
+      
+        <title>Weedtuber Channel Creator</title>
+      
+        <style>
+          /* existing CSS will be injected here */
+      
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: Arial, sans-serif; background: #121212; color: #eee; }
+/* scope flex-layout only to the editor page (which has #controls) */
+body:has(#controls) { display: flex; }
+
+#controls {
+  width: 50%;
+  padding: 16px;
+  background: #1f1f1f;
+  border-right: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+#controls label { font-size: .9rem; color: #ccc; }
+#controls input,
+#controls textarea,
+#controls button {
+  width: 100%;
+  font-size: .9rem;
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background: #2a2a2a;
+  color: #eee;
+}
+#controls button { background: #333; cursor: pointer; }
+#controls button:hover { background: #555; }
+
+#sections { list-style: none; margin: 0; padding: 0; }
+#sections li { display: flex; gap: 4px; margin-top: 6px; }
+#sections li input { flex: 1; }
+
+#preview {
+  width: 50%;
+  border: none;
+  height: 100%;
+  background: transparent;
+}
+
+/* Generated page navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #111;
+  padding: 15px 20px;
+}
+.navbar img {
+  width: 120px;
+  cursor: pointer;
+  transition: opacity .3s;
+}
+.navbar img:hover { opacity: .8; }
+.nav-links { display: flex; gap: 15px; }
+.nav-links a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 15px;
+  background: #333;
+  border-radius: 5px;
+  transition: background .3s;
+}
+.nav-links a:hover { background: #555; }
+
+.logo-text {
+  display: flex;
+  align-items: center;
+}
+.logo-text span {
+  margin-left: 10px;
+  font-size: 50px;
+  font-weight: bold;
+  color: rgba(47, 170, 96, 0.746);
+}
+
+.content {
+  padding: 40px 20px;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  background: linear-gradient(
+    to bottom right,
+    rgba(15,85,15,.5),
+    rgba(51,51,51,.5),
+    rgba(255,102,0,.5)
+  );
+  border-radius: 8px;
+}
+.season {
+  margin-bottom: 60px;
+  background: #1e1e1e;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,.5);
+}
+.season h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #a0ffa0;
+}
+.season h2 {
+  font-size: 20px;
+  margin-bottom: 25px;
+  color: #7f7;
+}
+iframe.generated {
+  width: 100%;
+  height: 648px;
+  border: none;
+  border-radius: 8px;
+}
+@media (max-width: 768px) {
+  iframe.generated { height: 320px; }
+  .content { padding: 20px; }
+}
+/* Output HTML textarea */
+#out {
+  flex: 1;                   /* stretch to fill remaining space */
+  min-height: 0;             /* allow flex to shrink */
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #444;
+  border-bottom: 1px solid #444;
+  background: #1b1b1b;
+  color: #eee;
+  resize: none;
+  overflow-y: auto;
+}
+
+
+
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+</head>
+<body>
+
+  <div id="controls">
+    <label>Page Title</label>
+    <input id="title" type="text" value="My Channel – Season 1">
+
+    <label>Description</label>
+    <textarea id="desc" rows="2">Sit back, relax & sesh with us!</textarea>
+
+    <h3 style="color:#a0ffa0;margin-top:12px">Sections</h3>
+    <button id="add">+ Add Section</button>
+    <ul id="sections"></ul>
+
+    <button id="gen">Generate</button>
+    <button id="dl">Download</button>
+
+    <label>Output HTML</label>
+    <textarea id="out" rows="6" readonly style="background:#1b1b1b;"></textarea>
+  </div>
+
+  <iframe id="preview"></iframe>
+
+  <script>
+    var sections = document.getElementById('sections');
+    function addSection(t,u){
+      var li=document.createElement('li'),
+          ti=document.createElement('input'),
+          ui=document.createElement('input'),
+          rm=document.createElement('button');
+      ti.placeholder='Title'; ti.value=t||'';
+      ui.placeholder='URL';   ui.value=u||'';
+      rm.textContent='✕'; rm.onclick=function(){ sections.removeChild(li); };
+      li.appendChild(ti); li.appendChild(ui); li.appendChild(rm);
+      sections.appendChild(li);
+    }
+    document.getElementById('add').onclick=function(){ addSection(); };
+    Sortable.create(sections,{animation:150});
+
+    document.getElementById('gen').onclick=function(){
+      var t=document.getElementById('title').value,
+          d=document.getElementById('desc').value,
+          html='<!DOCTYPE html>\n<html lang="en">\n<head>\n'+
+          '  <meta charset="UTF-8">\n'+
+          '  <meta name="viewport" content="width=device-width, initial-scale=1">\n'+
+          '  <title>'+t+'</title>\n\n'+
+          '  <!-- favicons -->\n'+
+          '  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">\n'+
+          '  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">\n'+
+          '  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">\n'+
+          '  <link rel="manifest" href="/favicons/site.webmanifest">\n\n'+
+          '  <!-- Meta tags -->\n'+
+          '  <meta name="description" content="'+d+'">\n'+
+          '  <meta name="keywords" content="">\n'+
+          '  <meta name="author" content="">\n'+
+          '  <meta property="og:title" content="'+t+'">\n'+
+          '  <meta property="og:description" content="'+d+'">\n'+
+          '  <meta property="og:image" content="">\n'+
+          '  <meta property="og:url" content="">\n'+
+          '  <meta name="twitter:card" content="summary_large_image">\n\n'+
+          '  <style>\n'+document.querySelector('style').innerText+'\n'+
+          '  </style>\n</head>\n<body>\n'+
+          '  <nav class="navbar">\n'+
+          '    <div class="logo-text">\n'+
+          '      <img src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png" alt="WeedTube Logo" onclick="location.href=\'home.html\'">\n'+
+          '      <span>WeedTube</span>\n'+
+          '    </div>\n'+
+          '    <div class="nav-links">\n'+
+          '      <a href="home.html">Home</a>\n'+
+          '      <a href="channels.html">Channels</a>\n'+
+          '      <a href="updates.html">Updates</a>\n'+
+          '      <a href="news.html">News</a>\n'+
+          '    </div>\n'+
+          '  </nav>\n\n'+
+          '  <div class="content">\n'+
+          '    <p>'+d+'</p>\n';
+      Array.from(sections.children).forEach(function(li,i){
+        var ti=li.children[0].value, ui=li.children[1].value;
+        html += '    <div class="season">\n'+
+                '      <h1>'+ti+'</h1>\n'+
+                '      <iframe class="generated" src="'+ui+'" allowfullscreen></iframe>\n'+
+                '    </div>\n';
+      });
+      html += '  </div>\n</body>\n</html>';
+      document.getElementById('out').value=html;
+      document.getElementById('preview').srcdoc=html;
+    };
+
+    document.getElementById('dl').onclick=function(){
+      var blob=new Blob([document.getElementById('out').value],{type:'text/html'}),
+          url=URL.createObjectURL(blob),
+          a=document.createElement('a');
+      a.href=url; a.download='channel.html';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    };
+  </script>
+
+  
+</body>
+</html>
