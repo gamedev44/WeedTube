@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WeedTube – Seasons</title>
+
+  <!-- favicons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+  <link rel="manifest" href="/favicons/site.webmanifest">
+
+    <!-- Meta tags for channel -->
+  <meta name="description" content="Smoky Ember Entertainment by Smoky Emerald – THE STREAMER IS Smoky Emerald. If you like cannabis & Beauty Related Media then this is the Channel For you.">
+  <meta name="keywords" content="Smoky Ember Entertainment, Smoky Emerald, cannabis, beauty, streaming, seasons">
+  <meta name="author" content="Smoky Emerald">
+  <meta property="og:title" content="Smoky Ember Entertainment – Seasons">
+  <meta property="og:description" content="Check out Season 1 and our new Shorts section on Smoky Ember Entertainment by Smoky Emerald">
+  <meta property="og:image" content="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png">
+  <meta property="og:url" content="https://your-channel-url.com/seasons.html">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      /* Falling-rose GIF over cosmetics background */
+      background:
+        url('https://i.ibb.co/WWbVDMyt/Falling-rose-Pedals.gif') center/cover no-repeat fixed,
+        url('https://pureoilsindia.b-cdn.net/builder/images/gallery/uploaded/Color-Cosmetics-(2000x1400).gif') center/cover no-repeat fixed;
+      color: #eee;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #111;
+      padding: 15px 20px;
+    }
+    .logo-text {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .logo-text img {
+      width: 120px;
+      transition: opacity 0.3s;
+    }
+    .logo-text img:hover {
+      opacity: 0.8;
+    }
+    .logo-text span {
+      margin-left: 10px;
+      font-size: 50px;
+      font-weight: bold;
+      color: rgba(47, 170, 96, 0.746);
+    }
+    .nav-links {
+      display: flex;
+      gap: 15px;
+    }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 15px;
+      background: #333;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    .nav-links a:hover {
+      background: #555;
+    }
+
+    .content {
+      padding: 40px 20px;
+      width: 100%;
+      max-width: 1280px;
+      margin: 20px auto;
+      background: linear-gradient(
+        to bottom right,
+        rgba(15,85,15,0.5),
+        rgba(51,51,51,0.5),
+        rgba(255,102,0,0.5)
+      );
+      border-radius: 8px;
+    }
+    .season {
+      margin-bottom: 60px;
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    .season h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    .season h2 {
+      font-size: 20px;
+      margin-bottom: 25px;
+      color: #a0ffa0;
+    }
+    iframe {
+      width: 100%;
+      max-width: 1152px;
+      height: 648px;
+      border: none;
+      border-radius: 8px;
+    }
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: #222;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      color: #eee;
+    }
+    .modal-content button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #0fa50f;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: #fff;
+      font-size: 16px;
+    }
+    #shortsContainer {
+      max-height: 400px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    @media (max-width: 768px) {
+      iframe {
+        height: 320px;
+      }
+      .season {
+        padding: 20px;
+      }
+      #shortsContainer {
+        max-height: 200px;
+      }
+    }
+  </style>
+
+  <!-- custom rose cursor -->
+  <style type="text/css">
+    * { cursor: url('https://cur.cursors-4u.net/nature/nat-10/nat934.cur') 16 16, auto !important; }
+  </style>
+</head>
+<body>
+  <!-- Rose-cursor credit -->
+  <a
+    href="https://www.cursors-4u.com/cursor/2011/11/04/elegant-rose-diagonal-resize-2.html"
+    target="_blank"
+    title="Elegant Rose – Diagonal Resize 2"
+  >
+    <img
+      src="https://cur.cursors-4u.net/cursor.png"
+      alt="Elegant Rose – Diagonal Resize 2"
+      style="position:absolute; top:0; right:0;"
+    />
+  </a>
+
+  <!-- Single navbar -->
+  <nav class="navbar">
+    <div class="logo-text" onclick="window.location.href='./home.html'">
+      <img
+        src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png"
+        alt="WeedTube Logo"
+      />
+      <span>WeedTube</span>
+    </div>
+    <div class="nav-links">
+      <a href="../../home.html">Home</a>
+      <a href="../../channels.html">Channels</a>
+      <a href="../../updates.html">Updates</a>
+      <a href="../../news.html">News</a>
+    </div>
+  </nav>
+
+  <!-- Welcome modal -->
+  <div id="introModal" class="modal">
+    <div class="modal-content">
+      <p>Whattup and what's good? It's Smoky Emerald — welcome to Smoky Ember Entertainment. If you’re new, sit back, relax, and enjoy the show. If you like cannabis & Beauty Related Media, this is the channel for you.</p>
+      <label><input type="checkbox" id="dontShowAgain"> Don't show this again</label><br>
+      <button id="closeModal">Okay</button>
+    </div>
+  </div>
+
+  <!-- Shorts reminder modal -->
+  <div id="reminderModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <p>Heads up! The new Shorts section is below—scroll down to check it out.</p>
+      <label><input type="checkbox" id="dontRemindAgain"> Don't show this again</label><br>
+      <button id="closeReminder">Got it</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="season" id="channel1">
+      <h1>Season 1</h1>
+      <h2>Hosted by Smoky Emerald</h2>
+      <iframe
+        id="season1Video"
+        src=""
+        allowfullscreen
+      ></iframe>
+
+      <!-- Giscus comments section (update repo & IDs if you have a new repository) -->
+      <div style="margin-top: 60px; max-width: 1152px;">
+        <script src="https://giscus.app/client.js"
+                data-repo="gamedev44/WeedTube"
+                data-repo-id="R_kgDON214Dw"
+                data-category="Comments"
+                data-category-id="DIC_kwDON214D84CpZKZ"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="top"
+                data-theme="dark_high_contrast"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+        <noscript>Please enable JavaScript to view comments powered by Giscus.</noscript>
+      </div>
+    </div>
+
+    <div class="season" id="shorts">
+      <h1>Shorts</h1>
+      <div id="shortsContainer"></div>
+    </div>
+  </div>
+
+  <script>
+    // Welcome modal logic
+    document.addEventListener('DOMContentLoaded', () => {
+      const introModal = document.getElementById('introModal');
+      const closeModal = document.getElementById('closeModal');
+      const dontShowAgain = document.getElementById('dontShowAgain');
+      if (localStorage.getItem('hideIntro') === 'true') {
+        introModal.style.display = 'none';
+      }
+      closeModal.onclick = () => {
+        if (dontShowAgain.checked) localStorage.setItem('hideIntro', 'true');
+        introModal.style.display = 'none';
+      };
+    });
+
+    // Shorts reminder (delayed & directional & throttled)
+    document.addEventListener('DOMContentLoaded', () => {
+      const season1Video = document.getElementById('season1Video');
+      const shortsSection = document.getElementById('shorts');
+      const reminderModal = document.getElementById('reminderModal');
+      const closeReminder = document.getElementById('closeReminder');
+      const dontRemindAgain = document.getElementById('dontRemindAgain');
+      let lastY = window.scrollY;
+      let shownAt = 0;
+      const delay = 5000;    // wait 5s before listening
+      const throttle = 30000; // at least 30s between shows
+      let ready = false;
+      setTimeout(() => { ready = true; }, delay);
+
+      window.addEventListener('scroll', () => {
+        if (!ready) return;
+        if (localStorage.getItem('hideReminder') === 'true') return;
+        const now = Date.now();
+        if (now - shownAt < throttle) return;
+
+        const currentY = window.scrollY;
+        const scrollingUp = currentY < lastY;
+        lastY = currentY;
+
+        const vidBottom = season1Video.getBoundingClientRect().bottom;
+        const shortsTop = shortsSection.getBoundingClientRect().top;
+
+        // trigger if user scrolls up (away) AND hasn't reached shorts yet
+        if (scrollingUp && vidBottom < window.innerHeight && shortsTop > window.innerHeight) {
+          reminderModal.style.display = 'flex';
+          shownAt = now;
+        }
+      });
+
+      closeReminder.onclick = () => {
+        if (dontRemindAgain.checked) localStorage.setItem('hideReminder', 'true');
+        reminderModal.style.display = 'none';
+      };
+    });
+
+    // Lazy-load shorts
+    const shortLinks = [
+      ""
+      // add more embed URLs here as needed
+    ];
+    let loadedCount = 0;
+    const container = document.getElementById('shortsContainer');
+    function loadNextShort() {
+      if (loadedCount >= shortLinks.length) return;
+      const iframe = document.createElement('iframe');
+      iframe.src = shortLinks[loadedCount];
+      iframe.width = "640";
+      iframe.height = "360";
+      iframe.frameBorder = "0";
+      iframe.allow = "fullscreen";
+      iframe.className = "rumble";
+      container.appendChild(iframe);
+      loadedCount++;
+    }
+    loadNextShort();
+    container.addEventListener('scroll', () => {
+      if (container.scrollTop + container.clientHeight >= container.scrollHeight - 10) {
+        loadNextShort();
+      }
+    });
+  </script>
+</body>
+</html>
