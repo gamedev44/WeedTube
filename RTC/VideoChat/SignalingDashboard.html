@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signaling Backend – Config Only</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#F0F4F8] min-h-screen p-6 font-['Inter',sans-serif]">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-2xl font-bold text-[#A0D2EB] mb-2">Signaling Backend Status</h1>
+        <p class="text-gray-600 text-sm mb-6">Firebase = signaling only. No app. Use the config below in VC_Breakroom.html.</p>
+
+        <!-- Status (you set these in Firebase Console) -->
+        <div class="bg-white rounded-lg border border-gray-200 p-4 mb-6 shadow-sm">
+            <p class="text-gray-700"><span class="inline-block w-3 h-3 rounded-full bg-[#E5B891] mr-2"></span> Anonymous Auth: enable in Firebase Console → Authentication</p>
+            <p class="text-gray-700 mt-2"><span class="inline-block w-3 h-3 rounded-full bg-[#E5B891] mr-2"></span> Firestore: create in Firebase Console → Firestore</p>
+            <p class="text-gray-700 mt-2"><span class="inline-block w-3 h-3 rounded-full bg-[#E5B891] mr-2"></span> Security rules: paste the rules for <code class="bg-gray-100 px-1">artifacts/&#123;appId&#125;/public/data/rooms/&#123;roomId&#125;</code></p>
+        </div>
+
+        <!-- Paste your config from Firebase Console -->
+        <label class="block text-gray-700 font-medium mb-2">Paste your firebaseConfig object from Firebase Console (Project settings → Your apps → config):</label>
+        <textarea id="configInput" rows="6" class="w-full border border-gray-300 rounded-lg p-3 font-mono text-sm bg-white" placeholder='{"apiKey":"...","authDomain":"...","projectId":"...","storageBucket":"...","messagingSenderId":"...","appId":"..."}'></textarea>
+        <p class="text-gray-500 text-xs mt-1">Paste the whole object, then click "Format & copy for VC_Breakroom".</p>
+
+        <button id="formatBtn" class="mt-3 px-4 py-2 bg-[#A0D2EB] hover:bg-[#8bc4e8] text-gray-800 rounded-lg font-medium transition">
+            Format & copy for VC_Breakroom
+        </button>
+
+        <!-- Output: string to use as __firebase_config -->
+        <div id="outputSection" class="hidden mt-6">
+            <label class="block text-gray-700 font-medium mb-2">Use this in VC_Breakroom.html as <code>window.__firebase_config</code>:</label>
+            <textarea id="configOutput" readonly rows="4" class="w-full border border-gray-300 rounded-lg p-3 font-mono text-sm bg-gray-50"></textarea>
+            <button id="copyBtn" class="mt-2 px-4 py-2 bg-[#E5B891] hover:bg-[#ddab7a] text-gray-800 rounded-lg font-medium transition">Copy to clipboard</button>
+        </div>
+    </div>
+
+    <script>
+        const configInput = document.getElementById('configInput');
+        const configOutput = document.getElementById('configOutput');
+        const outputSection = document.getElementById('outputSection');
+        const formatBtn = document.getElementById('formatBtn');
+        const copyBtn = document.getElementById('copyBtn');
+
+        formatBtn.onclick = function () {
+            let raw = configInput.value.trim();
+            if (!raw) {
+                alert('Paste your firebaseConfig from Firebase Console first.');
+                return;
+            }
+            try {
+                // Allow wrapping in parentheses or not
+                if (raw.startsWith('const ') || raw.startsWith('var ') || raw.startsWith('let ')) {
+                    raw = raw.replace(/^(const|var|let)\s+\w+\s*=\s*/, '').replace(/;\s*$/, '');
+                }
+                const obj = JSON.parse(raw);
+                const str = JSON.stringify(obj);
+                const line = "window.__firebase_config = '" + str.replace(/'/g, "\\'") + "';";
+                configOutput.value = line;
+                outputSection.classList.remove('hidden');
+            } catch (e) {
+                alert('Invalid JSON. Paste the exact firebaseConfig object from Firebase Console.');
+            }
+        };
+
+        copyBtn.onclick = function () {
+            configOutput.select();
+            document.execCommand('copy');
+            copyBtn.textContent = 'Copied!';
+            setTimeout(function () { copyBtn.textContent = 'Copy to clipboard'; }, 2000);
+        };
+    </script>
+</body>
+</html>

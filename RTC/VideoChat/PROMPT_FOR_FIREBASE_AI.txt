@@ -1,0 +1,38 @@
+DO NOT BUILD A FULL APP. DO NOT BUILD VIDEO CHAT, ROOMS UI, OR ANY FEATURES BEYOND WHAT IS LISTED BELOW.
+
+You must do ONLY these 3 things. Nothing else.
+
+---
+
+1) SIGNALING BACKEND (Firebase only)
+
+- Tell me exactly how to create a Firebase project and enable:
+  - Anonymous Authentication (only this; no email/password).
+  - Firestore Database (create it).
+- Give me the EXACT Firestore security rules to paste in. The rules must allow read/write only for this path for authenticated users:
+  artifacts/{appId}/public/data/rooms/{roomId}
+- Do not create any Cloud Functions. Do not create any other services. Only Auth + Firestore.
+
+---
+
+2) THE CONFIG I NEED
+
+- After I add a Web app in Firebase Project settings, I will get a firebaseConfig object.
+- You must output the EXACT format you need to use in an HTML page so that a script can use it. My existing video chat page expects a global variable:
+  window.__firebase_config = '<JSON STRING HERE>';
+- So give me: (a) step-by-step to get the config from Firebase Console (Project settings → Your apps → config), and (b) one code block that is ONLY the assignment above, with a placeholder like YOUR_API_KEY, YOUR_PROJECT_ID, etc., so I can replace them with my real values. Or tell me to paste my firebaseConfig object and stringify it for that line.
+- Do not build an app that “generates” the config. I will get the config from Firebase Console. Just tell me how to format it for __firebase_config.
+
+---
+
+3) BASIC DASHBOARD ONLY
+
+- One single HTML page. It must do ONLY:
+  - Show a title like “Signaling backend status”.
+  - Show 3 status lines: “Anonymous Auth: enabled”, “Firestore: created”, “Security rules: set” (I will set these myself in Firebase; the page can just show static text or check once and display the result).
+  - Show a big read-only text box or code block that DISPLAYS the Firebase config as a single string (the one I will use for __firebase_config). So the dashboard has one input: I paste my firebaseConfig from Firebase Console, and the page shows it in the correct format (JSON string for __firebase_config) and has a “Copy” button so I can paste it into my real app.
+- No rooms list. No user management. No video. No chat. No extra features. Only: status lines + config display + Copy button for the config string.
+
+---
+
+If you output anything besides (1) Firebase setup steps + Firestore rules, (2) how to get and format __firebase_config, and (3) one minimal dashboard HTML as described, you have failed the task. Do not add SessionSignal branding, extra pages, or app features. Signaling backend + basic dashboard + the config format only.

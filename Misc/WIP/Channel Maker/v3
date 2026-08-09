@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="pageTitleDisplay">WeedTube Channel Builder</title>
+
+    <!-- Load SortableJS for drag-and-drop ordering -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
+    <!-- Meta tags (will be updated by JS) -->
+    <meta name="description" content="Interactive WeedTube Channel Page Builder." id="metaDescription">
+    <meta property="og:title" content="WeedTube Channel Builder" id="ogTitle">
+    <meta property="og:description" content="Interactive WeedTube Channel Page Builder." id="ogDescription">
+
+    <style>
+        /* --- Core Page Styles (The look of the generated page) --- */
+        
+        /* 1. Base Layout & Background */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            background: url('https://i.pinimg.com/originals/c5/9a/d2/c59ad2bd4ad2fbacd04017debc679ddb.gif') center/cover no-repeat fixed;
+            color: #eee;
+            min-height: 100vh;
+            position: relative; 
+        }
+        
+        /* 2. Navbar Structure (Retained from previous structure) */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            background: #111; padding: 15px 20px;
+        }
+        .navbar img { width: 120px; cursor: pointer; transition: opacity 0.3s; }
+        .navbar img:hover { opacity: 0.8; }
+        .nav-links { display: flex; gap: 15px; }
+        .nav-links a {
+            color: white; text-decoration: none;
+            padding: 10px 15px; background: #333; border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .nav-links a:hover { background: #555; }
+        .logo-text { display: flex; align-items: center; }
+        .logo-text span {
+            margin-left: 10px; font-size: 50px; font-weight: bold;
+            color: rgba(47,170,96,0.746);
+        }
+        /* Settings panel */
+        .settings-panel {
+            margin: 20px auto 10px; padding: 15px; max-width: 1280px;
+            background: #1e1e1e; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .settings-panel h3 { margin: 0 0 10px; color:#ff6600; }
+        .settings-row { display:flex; flex-wrap:wrap; gap:10px; }
+        .settings-row > div { flex:1 1 280px; }
+        .settings-panel label { display:block; font-size:12px; color:#bbb; margin-bottom:4px; }
+        .settings-panel input, .settings-panel select, .settings-panel textarea {
+            width:100%; padding:8px; border-radius:6px; border:1px solid #444; background:#2a2a2a; color:#eee;
+        }
+
+        /* 3. Main Content Area */
+        .content {
+            padding: 40px 20px 120px; /* Space for bottom control bar */
+            width: 100%; max-width: 1280px; margin: 0 auto;
+            background: linear-gradient(
+                to bottom right,
+                rgba(15,85,15,0.5),
+                rgba(51,51,51,0.5),
+                rgba(255,102,0,0.5)
+            );
+            border-radius: 8px;
+            flex-grow: 1;
+        }
+        .season {
+            margin-bottom: 40px; background: #1e1e1e; padding: 30px;
+            border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .editable-title { 
+            font-size: 32px; 
+            margin-bottom: 15px; 
+            color: #a0ffa0;
+            outline: none; 
+            min-width: 100px;
+            cursor: text;
+            border-bottom: 2px dashed rgba(255, 102, 0, 0.5);
+            padding-bottom: 5px;
+        }
+        
+        /* 4. Responsive Video Aspect Ratio (CRUCIAL for fluid design) */
+        .video-responsive-container {
+            position: relative;
+            /* 16:9 Aspect Ratio: (9 / 16) * 100% = 56.25% */
+            padding-bottom: 56.25%; 
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        .generated-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* 5. WYSIWYG & Section Controls */
+        .section-controls {
+            position: absolute; top: 10px; right: 10px;
+            display: flex; gap: 5px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 5px;
+            border-radius: 4px;
+        }
+        
+        /* 6. Global Fixed Control Bar */
+        .global-controls-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: #111; z-index: 1000;
+            padding: 15px 20px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
+            display: flex; flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .control-button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            /* Make buttons full width on small screens */
+            flex-grow: 1; 
+            min-width: 150px;
+        }
+        
+        /* Control Bar colors (retained) */
+        .control-button-primary { background: #0fa50f; } 
+        .control-button-primary:hover { background: #0c8a0c; }
+        .control-button-export { background: #ff6600; } 
+        .control-button-export:hover { background: #cc5200; }
+        .control-button-delete { background: #d33; } 
+        .control-button-delete:hover { background: #a00; }
+        .control-button-action { background: #333; color: #a0ffa0;} 
+        .control-button-action:hover { background: #555; }
+        .section-control-icon {
+            padding: 5px; width: 30px; height: 30px; line-height: 20px; text-align: center;
+            border-radius: 4px; font-size: 1.2em; font-weight: bold; cursor: pointer; transition: background 0.1s;
+        }
+
+        /* 7. Mobile Adaptations (Ensuring Navbar Stacking) */
+        @media (max-width: 768px) {
+            .content { 
+                padding: 20px 10px 200px; /* More padding for bottom bar on mobile */
+            }
+            .navbar { 
+                flex-direction: column; /* Stack logo and links */
+                gap: 10px; 
+            }
+            .nav-links { 
+                width: 100%; 
+                justify-content: space-around; /* Distribute links evenly */
+            }
+            .nav-links a { 
+                padding: 8px 10px; 
+                flex-grow: 1;
+                text-align: center;
+                font-size: 0.9em;
+            }
+            .logo-text span {
+                font-size: 36px;
+            }
+            .global-controls-bar {
+                 padding: 10px; 
+            }
+            .control-button { 
+                min-width: unset;
+                width: 48%; /* Two buttons per row for better touch targets */
+            }
+            /* Ensure export buttons take up appropriate space on mobile */
+            .control-button:nth-child(5), .control-button:nth-child(6) {
+                width: 48%; 
+            }
+            .control-button:nth-child(7), .control-button:nth-child(8) {
+                width: 48%; 
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Navbar (Base Structure Kept) -->
+    <nav class="navbar">
+        <div class="logo-text">
+            <img src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png" alt="WeedTube Logo" onclick="window.location.href='./home.html'">
+            <span>WeedTube</span>
+        </div>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="channels.html">Channels</a>
+            <a href="updates.html">Updates</a>
+            <a href="news.html">News</a>
+        </div>
+    </nav>
+
+    <!-- Main Content Area (Dynamically populated with Channel Page Sections) -->
+    <div class="content">
+        <!-- Settings Panel -->
+        <div class="settings-panel">
+            <h3>Channel Settings</h3>
+            <div class="settings-row">
+                <div>
+                    <label>Channel Title</label>
+                    <input id="set_title" placeholder="My Channel – Season 1" />
+                </div>
+                <div>
+                    <label>Channel Description</label>
+                    <input id="set_desc" placeholder="Sit back, relax & sesh with us!" />
+                </div>
+            </div>
+            <h3 style="margin-top:10px;">Appearance</h3>
+            <div class="settings-row">
+                <div>
+                    <label>Background Image/GIF URL</label>
+                    <input id="set_bg" placeholder="https://.../background.gif" />
+                </div>
+                <div>
+                    <label>Cursor</label>
+                    <select id="set_cursor">
+                        <option value="default">Default</option>
+                        <option value="https://cur.cursors-4u.net/nature/nat-2/nat120.cur">Weed – Marijuana</option>
+                        <option value="https://cur.cursors-4u.net/toons/too-1/too83.cur">Cartoon Hand</option>
+                        <option value="https://cur.cursors-4u.net/sports/spo-4/spo302.cur">Skate Cursor</option>
+                        <option value="custom">Custom (.cur URL)</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Custom Cursor URL (.cur)</label>
+                    <input id="set_cursor_custom" placeholder="https://.../cursor.cur" />
+                </div>
+            </div>
+            <div class="settings-row">
+                <div>
+                    <label>Falling Overlay Sprite URL (PNG/GIF)</label>
+                    <input id="set_overlay_sprite" placeholder="https://.../leaf.png" />
+                </div>
+                <div>
+                    <label>Overlay</label>
+                    <select id="set_overlay_on">
+                        <option value="off">Off</option>
+                        <option value="on">On</option>
+                    </select>
+                </div>
+            </div>
+            <h3 style="margin-top:10px;">Channels Card (for channels.html)</h3>
+            <div class="settings-row">
+                <div>
+                    <label>Card Title</label>
+                    <input id="card_title" placeholder="Smokin Scope Studios - OkieSmokey420" />
+                </div>
+                <div>
+                    <label>Card Image URL</label>
+                    <input id="card_img" placeholder="./Assets/Images/channel1.png" />
+                </div>
+            </div>
+            <div class="settings-row">
+                <div>
+                    <label>Card Description</label>
+                    <textarea id="card_desc" placeholder="Short channel summary..."></textarea>
+                </div>
+                <div>
+                    <label>Discord Invite URL (optional)</label>
+                    <input id="card_discord" placeholder="https://discord.gg/..." />
+                </div>
+            </div>
+            <div class="settings-row">
+                <div>
+                    <label>Channel Slug (folder name)</label>
+                    <input id="card_slug" placeholder="mychannel" />
+                </div>
+                <div>
+                    <label>Submission Email</label>
+                    <input id="submit_email" placeholder="submit@weedtube.local" />
+                </div>
+            </div>
+        </div>
+        <!-- Content sections will be rendered here by JavaScript -->
+        <h2 style="color:#ff6600; text-align:center;">Editing Mode: Channel Page Videos</h2>
+        <p style="text-align:center; margin-bottom: 30px; color:#ccc;">Use the controls below to manage sections. The Selector Page builder uses its own data list, accessible via the control bar buttons.</p>
+    </div>
+
+    <!-- Fixed Global Controls Bar -->
+    <div class="global-controls-bar">
+        <!-- Channel Page Controls -->
+        <button class="control-button control-button-primary" onclick="addSection()">+ Add New Video Section</button>
+        <button class="control-button control-button-export" onclick="downloadHTML()">Download Final Channel HTML</button>
+        
+        <!-- Channel Selector Page Controls -->
+        <button class="control-button control-button-action" onclick="promptAddCard()">+ Add Channel Card</button> 
+        <button class="control-button control-button-primary" onclick="downloadSelectorPage()">Download Channel Selector Page</button>
+
+        <!-- Utility Buttons -->
+        <button class="control-button control-button-action" onclick="copyCodeToClipboard()">Copy Channel Code</button>
+        <button class="control-button control-button-action" onclick="copySelectorCodeToClipboard()">Copy Selector Code</button>
+        <button class="control-button control-button-action" onclick="copySingleCard()">Copy Single Card</button>
+        <button class="control-button control-button-export" onclick="exportToJSFiddle()">Export Channel to JSFiddle</button>
+        <button class="control-button control-button-export" onclick="emailSubmission()">Submit Request (Email)</button>
+    </div>
+    
+    <!-- Hidden form for JSFiddle export -->
+    <form id="jsfiddle-form" method="post" action="https://jsfiddle.net/api/post/library/pure/" target="_blank" style="display:none;">
+        <textarea name="html"></textarea>
+    </form>
+
+    <!-- Custom Modal for Notifications -->
+    <div id="messageBox">
+        <p id="messageText"></p>
+        <button onclick="document.getElementById('messageBox').style.display='none'">OK</button>
+    </div>
+
+    <script>
+        const contentDiv = document.querySelector('.content');
+        const defaultTitle = 'My Channel – Season 1';
+        const defaultDesc = 'Sit back, relax & sesh with us!';
+        const targetEmail = 'ironwillinteractive@gmail.com';
+        // Appearance/Submission state
+        let appearance = {
+            bgUrl: 'https://i.pinimg.com/originals/c5/9a/d2/c59ad2bd4ad2fbacd04017debc679ddb.gif',
+            cursor: 'default',
+            cursorCustom: '',
+            overlayOn: 'off',
+            overlaySprite: ''
+        };
+        let submission = {
+            cardTitle: '', cardImg: '', cardDesc: '', cardDiscord: '', cardSlug: 'mychannel', submitEmail: 'submit@weedtube.local'
+        };
+        
+        // Data for Channel Page Video Sections
+        let sectionsData = [];
+        
+        // Data for Channel Selector Cards (NEW)
+        let cardData = [
+            { 
+                title: 'Smokin Scope Studios - OkieSmokey420', 
+                img: './Assets/Images/channel1.png', 
+                desc: 'Smoke sessions, dev updates, shoutouts, and the occasional big party stream — Brought to you all from the 405.', 
+                discord: 'https://discord.gg/tZ9ChQbKBT', 
+                channelLink: './channels/channel1/channel1.html' 
+            },
+            { 
+                title: "Techno's Game Club - Wambo", 
+                img: './Assets/Images/channel2.png', 
+                desc: 'If you like cannabis & video games or PC building, Then this is your spot.', 
+                discord: 'https://discord.gg/7MRVVxcUa7', 
+                channelLink: './channels/channel2/channel2.html' 
+            },
+            { 
+                title: 'Smoky Ember Entertainment - Smoky Emerald', 
+                img: './Assets/Images/channel3.png', 
+                desc: 'If you like cannabis & Beauty Related Media then this is the Channel For you.', 
+                discord: 'https://discord.gg/4CSedEaMVt', 
+                channelLink: './channels/channel3/channel3.html' 
+            }
+        ];
+        
+        // --- Utility Functions ---
+
+        function showMessage(text) {
+            document.getElementById('messageText').textContent = text;
+            document.getElementById('messageBox').style.display = 'flex';
+        }
+
+        // Custom confirmation dialog (since alert/confirm is forbidden)
+        function confirmAction(message) {
+            // Using window.confirm as it is simpler for this builder utility
+            return window.confirm(message);
+        }
+
+        // --- Data & Persistence ---
+
+        function saveState() {
+            localStorage.setItem('channelBuilder_title', document.title);
+            localStorage.setItem('channelBuilder_sections', JSON.stringify(sectionsData));
+            localStorage.setItem('channelBuilder_cards', JSON.stringify(cardData)); // New
+            localStorage.setItem('channelBuilder_appearance', JSON.stringify(appearance));
+            localStorage.setItem('channelBuilder_submission', JSON.stringify(submission));
+        }
+
+        function loadState() {
+            const storedSections = localStorage.getItem('channelBuilder_sections');
+            if (storedSections) {
+                try {
+                    sectionsData = JSON.parse(storedSections);
+                } catch (e) {
+                    console.error("Could not parse sections from localStorage", e);
+                    // Use a generic placeholder for the builder view
+                    sectionsData = [{ title: 'Season 1 - My Main Video', url: 'https://rumble.com/embed/v6gmoej/?pub=4j237g' }];
+                }
+            } else {
+                sectionsData = [{ title: 'Season 1 - My Main Video', url: 'https://rumble.com/embed/v6gmoej/?pub=4j237g' }];
+            }
+
+            const storedCards = localStorage.getItem('channelBuilder_cards'); // New
+            if (storedCards) {
+                try {
+                    cardData = JSON.parse(storedCards);
+                } catch (e) {
+                    console.error("Could not parse cards from localStorage", e);
+                    // Keep default cardData if parsing fails
+                }
+            } 
+
+            document.title = localStorage.getItem('channelBuilder_title') || defaultTitle;
+            const ap = localStorage.getItem('channelBuilder_appearance');
+            if (ap) { try { appearance = JSON.parse(ap); } catch(e){} }
+            const sub = localStorage.getItem('channelBuilder_submission');
+            if (sub) { try { submission = JSON.parse(sub); } catch(e){} }
+            applyBuilderAppearance();
+        }
+
+        // --- Channel Page Section Management ---
+
+        function addSection(insertIndex = sectionsData.length) {
+            const newSection = { 
+                title: `New Video Section ${sectionsData.length + 1}`, 
+                url: 'https://rumble.com/embed/vxxxxxx/?pub=yyyyyy' 
+            };
+            sectionsData.splice(insertIndex, 0, newSection);
+            renderPage();
+            showMessage(`New video section added at position ${insertIndex + 1}.`);
+        }
+        
+        function removeSection(index) {
+            if (sectionsData.length > 1 && confirmAction(`Are you sure you want to delete video section "${sectionsData[index].title}"?`)) {
+                sectionsData.splice(index, 1);
+                renderPage();
+                showMessage('Video section deleted.');
+            } else if (sectionsData.length === 1) {
+                showMessage("Cannot delete the last remaining video section.");
+            }
+        }
+
+        function editSectionURL(index) {
+            const currentUrl = sectionsData[index].url;
+            const newUrl = prompt(`Enter new RUMBLE EMBED URL for "${sectionsData[index].title}":\n\nExample: https://rumble.com/embed/v6gmoej/?pub=4j237g`, currentUrl);
+            if (newUrl !== null && newUrl.trim() !== currentUrl) {
+                sectionsData[index].url = newUrl.trim();
+                renderPage();
+                showMessage('Video URL updated.');
+            }
+        }
+        
+        function moveSection(index, direction) {
+            const newIndex = index + direction;
+            if (newIndex >= 0 && newIndex < sectionsData.length) {
+                [sectionsData[index], sectionsData[newIndex]] = [sectionsData[newIndex], sectionsData[index]];
+                renderPage();
+                showMessage('Video section moved.');
+            }
+        }
+        
+        function updateTitle(el, index) {
+            sectionsData[index].title = el.textContent.trim();
+            saveState();
+        }
+        
+        // --- Channel Selector Card Management (NEW) ---
+
+        function promptAddCard() {
+            const title = prompt("Enter Channel Card Title (e.g., OkieSmokey420):", "My Cool Channel");
+            if (title === null) return;
+            const img = prompt("Enter Image URL (e.g., ./Assets/Images/channel1.png):", "./Assets/Images/new_channel.png");
+            if (img === null) return;
+            const desc = prompt("Enter Channel Description:", "A cool new channel about...");
+            if (desc === null) return;
+            const discord = prompt("Enter Discord Invite URL (or leave blank):", "https://discord.gg/invite");
+            const channelLink = prompt("Enter Channel Page HTML Link (e.g., ./channels/mychannel/index.html):", "./channels/mychannel/index.html");
+            if (channelLink === null) return;
+
+            cardData.push({ title, img, desc, discord, channelLink });
+            saveState();
+            showMessage(`Channel Card "${title}" added to the selector list. ${cardData.length} cards total.`);
+        }
+
+        // --- Core Rendering Logic ---
+
+        function renderPage() {
+            let sectionsHtml = '';
+            
+            // Add the informational header for clarity in the builder
+            sectionsHtml += `<h2 style="color:#ff6600; text-align:center;">Editing Mode: Channel Page Videos</h2>
+                             <p style="text-align:center; margin-bottom: 30px; color:#ccc;">(This section builds the *individual* channel page HTML.)</p>`;
+
+            sectionsData.forEach(function(section, index) {
+                const isFirst = index === 0;
+                const isLast = index === sectionsData.length - 1;
+                
+                sectionsHtml += 
+                `    <div class="season" id="section-${index}">
+                      <div class="section-controls">
+                            <!-- Move Up/Down controls -->
+                            <span class="section-control-icon control-button-action" title="Move Up" onclick="moveSection(${index}, -1)" style="visibility:${isFirst ? 'hidden' : 'visible'};">▲</span>
+                            <span class="section-control-icon control-button-action" title="Move Down" onclick="moveSection(${index}, 1)" style="visibility:${isLast ? 'hidden' : 'visible'};">▼</span>
+                            
+                            <!-- Edit URL button -->
+                            <span class="section-control-icon control-button-action" title="Edit Video URL (Rumble Embed)" onclick="editSectionURL(${index})">🔗</span>
+                            
+                            <!-- Delete button -->
+                            <span class="section-control-icon control-button-delete" title="Delete Section" onclick="removeSection(${index})">🗑️</span>
+                      </div>
+                      <h1 class="editable-title" data-index="${index}" contenteditable="true" 
+                          oninput="updateTitle(this, ${index})">${section.title}</h1>
+                          
+                      <!-- Responsive Video Container -->
+                      <div class="video-responsive-container">
+                          <iframe class="generated-iframe" src="${section.url}" allowfullscreen></iframe>
+                      </div>
+                      
+                      <!-- Dynamic Add Button -->
+                      <button class="control-button control-button-primary" style="margin-top: 20px; width: 100%;" onclick="addSection(${index + 1})">+ Add Section Below</button>
+                    </div>`;
+            });
+
+            // Update page metadata and render HTML
+            document.getElementById('pageTitleDisplay').textContent = sectionsData[0] ? sectionsData[0].title : defaultTitle;
+            document.getElementById('metaDescription').content = defaultDesc;
+            document.getElementById('ogTitle').content = sectionsData[0] ? sectionsData[0].title : defaultTitle;
+            document.getElementById('ogDescription').content = defaultDesc;
+            
+            contentDiv.innerHTML = sectionsHtml;
+            saveState();
+        }
+
+        // --- Export Functions for Channel Page (Individual Page) ---
+        
+        function getCleanHTML(title, description, sections) {
+            let sectionHTML = '';
+            sections.forEach(function(section) {
+                sectionHTML += 
+                '    <div class="season">\n'+
+                '      <h1>'+section.title+'</h1>\n'+
+                '      <div class="video-responsive-container">\n'+
+                '        <iframe class="generated-iframe" src="'+section.url+'" allowfullscreen></iframe>\n'+
+                '      </div>\n'+
+                '    </div>\n';
+            });
+            // Appearance computed styles
+            const bgInline = appearance.bgUrl ? `background: url('${appearance.bgUrl}') center/cover no-repeat fixed;` : '';
+            const cursorUrl = appearance.cursor === 'custom' ? appearance.cursorCustom : (appearance.cursor === 'default' ? '' : appearance.cursor);
+            const cursorStyle = cursorUrl ? `cursor: url('${cursorUrl}'), auto;` : '';
+            const bodyOpenTag = `<body${(bgInline || cursorStyle) ? ` style=\"${bgInline} ${cursorStyle}\"` : ''}>`;
+            const overlayCss = appearance.overlayOn === 'on' && appearance.overlaySprite ? `
+        #falling-overlay{position:fixed;left:0;top:0;right:0;bottom:0;pointer-events:none;}
+        #falling-overlay img{position:absolute;width:40px;height:auto;animation:fall 8s linear infinite;}
+        @keyframes fall{0%{transform:translateY(-60px) rotate(0deg);}100%{transform:translateY(120vh) rotate(360deg);}}
+            ` : '';
+            const overlayBlock = appearance.overlayOn === 'on' && appearance.overlaySprite ? `<div id=\"falling-overlay\"></div><script>(function(){var p=document.getElementById('falling-overlay');for(var i=0;i<12;i++){var img=document.createElement('img');img.src='${appearance.overlaySprite}';img.style.left=Math.floor(Math.random()*100)+'%';img.style.top='-60px';img.style.animationDuration=(6+Math.random()*8)+'s';p.appendChild(img);}})();</script>` : '';
+            
+            // This is the clean, final HTML structure for export
+            return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${title}</title>
+
+    <!-- Meta tags for channel -->
+    <meta name="description" content="${description}">
+    <meta property="og:title" content="${title}">
+    <meta property="og:description" content="${description}">
+
+    <style>
+        /* --- FINAL EXPORT STYLES (Responsive) --- */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            background: url('https://i.pinimg.com/originals/c5/9a/d2/c59ad2bd4ad2fbacd04017debc679ddb.gif') center/cover no-repeat fixed;
+            color: #eee;
+            min-height: 100vh;
+        }
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            background: #111; padding: 15px 20px;
+        }
+        .navbar img { width: 120px; cursor: pointer; transition: opacity 0.3s; }
+        .navbar img:hover { opacity: 0.8; }
+        .nav-links { display: flex; gap: 15px; }
+        .nav-links a {
+            color: white; text-decoration: none;
+            padding: 10px 15px; background: #333; border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .nav-links a:hover { background: #555; }
+        .content {
+            padding: 40px 20px; width: 100%; max-width: 1280px; margin: 0 auto;
+            background: linear-gradient(
+                to bottom right,
+                rgba(15,85,15,0.5),
+                rgba(51,51,51,0.5),
+                rgba(255,102,0,0.5)
+            );
+            border-radius: 8px;
+            flex-grow: 1;
+        }
+        .season {
+            margin-bottom: 40px; background: #1e1e1e; padding: 30px;
+            border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        h1 { 
+            font-size: 32px; 
+            margin-bottom: 15px; 
+            color: #a0ffa0;
+        }
+        .logo-text { display: flex; align-items: center; }
+        .logo-text span {
+            margin-left: 10px; font-size: 50px; font-weight: bold;
+            color: rgba(47,170,96,0.746);
+        }
+
+        /* Responsive Video Aspect Ratio */
+        .video-responsive-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        .generated-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Mobile Adaptations */
+        @media (max-width: 768px) {
+            .content { padding: 20px 10px; }
+            .navbar { flex-direction: column; gap: 10px; }
+            .nav-links { width: 100%; justify-content: space-around; }
+            .nav-links a { flex-grow: 1; text-align: center; font-size: 0.9em; }
+            .logo-text span { font-size: 36px; }
+        }
+        
+        /* Comments/Placeholder */
+        .comments-placeholder {
+            margin-top: 60px; padding: 20px; background: #333; border-radius: 8px;
+            text-align: center; color: #aaa;
+        }
+        ${overlayCss}
+    </style>
+</head>
+${bodyOpenTag}
+    
+    <nav class="navbar">
+        <div class="logo-text">
+            <img src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png" alt="WeedTube Logo" onclick="window.location.href='./home.html'">
+            <span>WeedTube</span>
+        </div>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="channels.html">Channels</a>
+            <a href="updates.html">Updates</a>
+            <a href="news.html">News</a>
+        </div>
+    </nav>
+
+    <div class="content">
+        ${sectionHTML}
+        
+        <!-- Placeholder for Giscus or other comment system -->
+        <div class="comments-placeholder">
+            Comments section can be added here (e.g., Giscus, or your own system).
+        </div>
+    </div>
+    ${overlayBlock}
+</body>
+</html>`;
+        }
+
+        function downloadHTML() {
+            const finalCode = getCleanHTML(document.title, defaultDesc, sectionsData);
+            const blob = new Blob([finalCode], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; 
+            a.download = document.title.replace(/[^a-z0-9]/gi, '_').toLowerCase().slice(0, 30) + '_channel.html';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            showMessage('Channel HTML File downloaded successfully as: ' + a.download);
+        }
+        
+        function copyCodeToClipboard() {
+            const finalCode = getCleanHTML(document.title, defaultDesc, sectionsData);
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(finalCode).then(() => {
+                    showMessage('The full Channel HTML code has been copied to your clipboard!');
+                }).catch(err => {
+                    const tempTextArea = document.createElement('textarea');
+                    tempTextArea.value = finalCode;
+                    document.body.appendChild(tempTextArea);
+                    tempTextArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tempTextArea);
+                    showMessage('The Channel HTML code has been copied to your clipboard (Manual Copy Fallback).');
+                });
+            } else {
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = finalCode;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempTextArea);
+                showMessage('The Channel HTML code has been copied to your clipboard (Manual Copy Fallback).');
+            }
+        }
+        
+        // --- Export Functions for Channel Selector Page (NEW) ---
+
+        function getSelectorHTML(cards) {
+            let cardHTML = '';
+            cards.forEach(function(card) {
+                const discordButton = card.discord && card.discord.trim() !== ''
+                    ? `      <a class="discord-link" href="${card.discord}" target="_blank">Join Discord</a>\n`
+                    : '';
+                    
+                cardHTML += 
+                `    <div class="channel" onclick="location.href='${card.channelLink}'">\n`+
+                `      <h2>${card.title}</h2>\n`+
+                `      <img src="${card.img}" alt="${card.title}">\n`+
+                `      <p>${card.desc}</p>\n`+
+                `${discordButton}`+
+                `    </div>\n`;
+            });
+            
+            const title = 'WeedTube - Channels Selector';
+
+            return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${title}</title>
+
+    <!-- Meta tags for selector page -->
+    <meta name="description" content="A curated list of WeedTube channels.">
+    <meta property="og:title" content="${title}">
+    <meta property="og:description" content="A curated list of WeedTube channels.">
+
+    <style>
+        /* --- FINAL EXPORT STYLES (Responsive Channel Selector) --- */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            background: #121212;
+            color: #eee;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            background: #111; padding: 15px 20px;
+        }
+        .navbar img { width: 120px; cursor: pointer; transition: opacity 0.3s; }
+        .navbar img:hover { opacity: 0.8; }
+        .nav-links { display: flex; gap: 15px; }
+        .nav-links a {
+            color: white; text-decoration: none;
+            padding: 10px 15px; background: #333; border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .nav-links a:hover { background: #555; }
+        .logo-text { display: flex; align-items: center; }
+        .logo-text span {
+            margin-left: 10px; font-size: 50px; font-weight: bold;
+            color: rgba(47,170,96,0.746);
+        }
+
+        /* Channel Card Grid */
+        .content {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            padding: 40px 20px; gap: 20px;
+        }
+        .channel {
+            width: 320px; background: #1e1e1e; border-radius: 12px;
+            padding: 20px; text-align: center; box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            transition: transform 0.2s; cursor: pointer;
+        }
+        .channel:hover { transform: scale(1.02); }
+        .channel img {
+            width: 100%; border-radius: 8px; margin-bottom: 15px;
+        }
+        .channel h2 {
+            color: #a0ffa0; margin-bottom: 10px;
+        }
+        .channel p {
+            margin-bottom: 15px;
+        }
+        .discord-link {
+            display: inline-block; padding: 10px 15px; background: #5865F2;
+            color: #fff; border-radius: 6px; text-decoration: none;
+            font-weight: bold; transition: background 0.3s;
+        }
+        .discord-link:hover { background: #4752c4; }
+
+        /* Mobile Adaptations */
+        @media (max-width: 768px) {
+            .content { padding: 20px 10px; }
+            .navbar { flex-direction: column; gap: 10px; }
+            .nav-links { width: 100%; justify-content: space-around; }
+            .nav-links a { flex-grow: 1; text-align: center; font-size: 0.9em; }
+            .logo-text span { font-size: 36px; }
+            .channel { width: 90%; }
+        }
+    </style>
+</head>
+<body>
+    
+    <nav class="navbar">
+        <div class="logo-text">
+            <img src="https://i.ibb.co/NnFz4Rps/image-2025-02-04-143334953.png" alt="WeedTube Logo" onclick="window.location.href='./home.html'">
+            <span>WeedTube</span>
+        </div>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="channels.html">Channels</a>
+            <a href="updates.html">Updates</a>
+            <a href="news.html">News</a>
+        </div>
+    </nav>
+
+    <div class="content">
+        ${cardHTML}
+    </div>
+</body>
+</html>`;
+        }
+
+        function downloadSelectorPage() {
+            if (cardData.length === 0) {
+                showMessage("You must add at least one Channel Card before downloading the Selector Page!");
+                return;
+            }
+            const finalCode = getSelectorHTML(cardData);
+            const blob = new Blob([finalCode], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; 
+            a.download = 'channels_selector_page.html';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            showMessage('Channel Selector Page downloaded successfully as: channels_selector_page.html');
+        }
+
+        function copySelectorCodeToClipboard() {
+            if (cardData.length === 0) {
+                showMessage("You must add at least one Channel Card before copying the Selector Page code!");
+                return;
+            }
+            const finalCode = getSelectorHTML(cardData);
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(finalCode).then(() => {
+                    showMessage('The full Channel Selector HTML code has been copied to your clipboard!');
+                }).catch(() => {
+                    const tempTextArea = document.createElement('textarea');
+                    tempTextArea.value = finalCode;
+                    document.body.appendChild(tempTextArea);
+                    tempTextArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tempTextArea);
+                    showMessage('The Channel Selector HTML code has been copied to your clipboard (Manual Copy Fallback).');
+                });
+            } else {
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = finalCode;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempTextArea);
+                showMessage('The Channel Selector HTML code has been copied to your clipboard (Manual Copy Fallback).');
+            }
+        }
+        
+        function exportToJSFiddle() {
+            const finalCode = getCleanHTML(document.title, defaultDesc, sectionsData);
+            const jsfiddleForm = document.getElementById('jsfiddle-form');
+            const textarea = jsfiddleForm.querySelector('textarea[name="html"]');
+            textarea.value = finalCode;
+            jsfiddleForm.submit();
+            showMessage('Exporting Channel Page code to JSFiddle in a new tab...');
+        }
+        
+        function emailCode() {
+            copyCodeToClipboard(); 
+
+            const subject = encodeURIComponent(`Code Review: ${document.title}`);
+            const body = encodeURIComponent(
+                "Hi,\n\nI have generated the HTML code for my channel page. The full code has been copied to your clipboard, please paste it below.\n\nThanks!"
+            );
+
+            const mailtoLink = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
+            setTimeout(() => window.location.href = mailtoLink, 100);
+            showMessage(`Channel code copied to clipboard. Opening email draft to ${targetEmail}...`);
+        }
+
+        // --- Initialization ---
+
+        // Apply appearance live in builder
+        function applyBuilderAppearance() {
+            if (appearance.bgUrl) {
+                document.body.style.backgroundImage = `url('${appearance.bgUrl}')`;
+                document.body.style.backgroundSize = 'cover';
+                document.body.style.backgroundPosition = 'center';
+                document.body.style.backgroundAttachment = 'fixed';
+            } else {
+                document.body.style.backgroundImage = '';
+            }
+            const cursorUrl = appearance.cursor === 'custom' ? appearance.cursorCustom : (appearance.cursor === 'default' ? '' : appearance.cursor);
+            if (cursorUrl) {
+                document.body.style.cursor = `url('${cursorUrl}'), auto`;
+            } else {
+                document.body.style.cursor = '';
+            }
+            setupOverlay();
+        }
+
+        // Simple falling overlay using CSS animation and random clones
+        function setupOverlay() {
+            const old = document.getElementById('falling-overlay');
+            if (old) old.remove();
+            if (appearance.overlayOn !== 'on' || !appearance.overlaySprite) return;
+            const overlay = document.createElement('div');
+            overlay.id = 'falling-overlay';
+            overlay.style.position = 'fixed';
+            overlay.style.left = '0'; overlay.style.top = '0'; overlay.style.right = '0'; overlay.style.bottom = '0';
+            overlay.style.pointerEvents = 'none';
+            document.body.appendChild(overlay);
+            for (let i=0;i<12;i++) {
+                const img = document.createElement('img');
+                img.src = appearance.overlaySprite;
+                const size = 24 + Math.floor(Math.random()*32);
+                img.style.width = size+'px'; img.style.height = 'auto';
+                img.style.position = 'absolute';
+                img.style.left = Math.floor(Math.random()*100)+'%';
+                img.style.top = '-60px';
+                img.style.animation = `fall${i} ${6+Math.random()*8}s linear infinite`;
+                overlay.appendChild(img);
+                const style = document.createElement('style');
+                style.textContent = `@keyframes fall${i}{0%{transform:translateY(-60px) rotate(0deg);}100%{transform:translateY(120vh) rotate(360deg);}}`;
+                document.head.appendChild(style);
+            }
+        }
+
+        // Copy a single channels card HTML generated from submission fields
+        function copySingleCard() {
+            const slug = submission.cardSlug || 'mychannel';
+            const cardHTML = `
+                <div class="channel-card">
+                    <h3>${submission.cardTitle || 'My Channel'}</h3>
+                    <img src="${submission.cardImg || './Assets/Images/channel.png'}" alt="${submission.cardTitle || 'My Channel'} Thumbnail">
+                    <p>${submission.cardDesc || ''}</p>
+                    ${submission.cardDiscord ? `<a href="${submission.cardDiscord}" class="discord-link">Join Discord</a>` : ''}
+                    <a href="../channels/${slug}/index.html" class="view-channel">Visit Channel</a>
+                </div>
+            `;
+            navigator.clipboard.writeText(cardHTML).then(() => showMessage('Single card HTML copied!'));
+        }
+
+        // Email submission with both page HTML and card HTML
+        function emailSubmission() {
+            const channelHtml = getCleanHTML();
+            const slug = submission.cardSlug || 'mychannel';
+            const cardHTML = `
+                <div class="channel-card">
+                    <h3>${submission.cardTitle || 'My Channel'}</h3>
+                    <img src="${submission.cardImg || './Assets/Images/channel.png'}" alt="${submission.cardTitle || 'My Channel'} Thumbnail">
+                    <p>${submission.cardDesc || ''}</p>
+                    ${submission.cardDiscord ? `<a href="${submission.cardDiscord}" class="discord-link">Join Discord</a>` : ''}
+                    <a href="../channels/${slug}/index.html" class="view-channel">Visit Channel</a>
+                </div>
+            `;
+            const body = encodeURIComponent(
+                `Channel Title: ${document.title}\nSlug: ${slug}\nImage: ${submission.cardImg}\nDiscord: ${submission.cardDiscord}\n\n--- Card HTML ---\n${cardHTML}\n\n--- Channel HTML ---\n${channelHtml}`
+            );
+            const mailto = `mailto:${submission.submitEmail || targetEmail}?subject=${encodeURIComponent('New WeedTube Channel Submission')}&body=${body}`;
+            window.location.href = mailto;
+        }
+
+        window.onload = function() {
+            loadState();
+            renderPage();
+            applyBuilderAppearance();
+
+            // This is just for visual editing of the "WeedTube" text in the builder itself
+            document.querySelector('.logo-text span').setAttribute('contenteditable', 'true');
+            document.querySelector('.logo-text span').style.cursor = 'text';
+
+            // Wire settings panel inputs
+            const set = (id)=>document.getElementById(id);
+            const t = set('set_title'); if (t) { t.value = document.title; t.oninput = (e)=>{ document.title = e.target.value || 'WeedTube Channel – Season 1'; saveState(); renderPage(); }}
+            const d = set('set_desc'); if (d) { d.value = localStorage.getItem('channelBuilder_desc') || ''; d.oninput = (e)=>{ localStorage.setItem('channelBuilder_desc', e.target.value); }}
+            const bg = set('set_bg'); if (bg) { bg.value = appearance.bgUrl || ''; bg.oninput = (e)=>{ appearance.bgUrl = e.target.value.trim(); applyBuilderAppearance(); saveState(); }}
+            const cur = set('set_cursor'); if (cur) { cur.value = appearance.cursor || 'default'; cur.onchange = (e)=>{ appearance.cursor = e.target.value; applyBuilderAppearance(); saveState(); }}
+            const curc = set('set_cursor_custom'); if (curc) { curc.value = appearance.cursorCustom || ''; curc.oninput = (e)=>{ appearance.cursorCustom = e.target.value.trim(); applyBuilderAppearance(); saveState(); }}
+            const ov = set('set_overlay_on'); if (ov) { ov.value = appearance.overlayOn || 'off'; ov.onchange = (e)=>{ appearance.overlayOn = e.target.value; applyBuilderAppearance(); saveState(); }}
+            const ovs = set('set_overlay_sprite'); if (ovs) { ovs.value = appearance.overlaySprite || ''; ovs.oninput = (e)=>{ appearance.overlaySprite = e.target.value.trim(); applyBuilderAppearance(); saveState(); }}
+
+            const cti = set('card_title'); if (cti) { cti.value = submission.cardTitle || ''; cti.oninput = (e)=>{ submission.cardTitle = e.target.value; saveState(); }}
+            const cim = set('card_img'); if (cim) { cim.value = submission.cardImg || ''; cim.oninput = (e)=>{ submission.cardImg = e.target.value; saveState(); }}
+            const cds = set('card_desc'); if (cds) { cds.value = submission.cardDesc || ''; cds.oninput = (e)=>{ submission.cardDesc = e.target.value; saveState(); }}
+            const cdi = set('card_discord'); if (cdi) { cdi.value = submission.cardDiscord || ''; cdi.oninput = (e)=>{ submission.cardDiscord = e.target.value; saveState(); }}
+            const csl = set('card_slug'); if (csl) { csl.value = submission.cardSlug || 'mychannel'; csl.oninput = (e)=>{ submission.cardSlug = e.target.value; saveState(); }}
+            const sem = set('submit_email'); if (sem) { sem.value = submission.submitEmail || 'submit@weedtube.local'; sem.oninput = (e)=>{ submission.submitEmail = e.target.value; saveState(); }}
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEB RTV</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Simple-Peer Library -->
+    <script src="https://unpkg.com/simple-peer@9.11.1/simplepeer.min.js"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center p-4">
+
+    <div class="max-w-4xl w-full">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-blue-400">P2P Video Messenger TestRoom</h1>
+            <p class="text-gray-400 text-sm">Powered by Iron Will Interactive RPC Server 2</p>
+        </header>
+
+        <!-- Video Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div class="relative bg-black rounded-xl overflow-hidden shadow-2xl aspect-video border border-gray-700">
+                <video id="localVideo" autoplay playsinline muted class="w-full h-full object-cover bg-gray-800"></video>
+                <div class="absolute bottom-2 left-2 bg-black/50 px-2 py-1 rounded text-xs">You (Local)</div>
+            </div>
+            <div class="relative bg-black rounded-xl overflow-hidden shadow-2xl aspect-video border border-gray-700">
+                <video id="remoteVideo" autoplay playsinline class="w-full h-full object-cover bg-gray-800"></video>
+                <div class="absolute bottom-2 left-2 bg-black/50 px-2 py-1 rounded text-xs">Partner (Remote)</div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div id="setupUI" class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700 text-center">
+            <div id="initialActions">
+                <p class="mb-4">To start a call, create a room or join an existing one.</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button id="createBtn" class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg font-semibold transition">
+                        Create New Room
+                    </button>
+                    <div class="flex">
+                        <input id="roomInput" type="text" placeholder="Enter Room ID" class="bg-gray-700 border border-gray-600 px-4 py-2 rounded-l-lg focus:outline-none focus:border-blue-500">
+                        <button id="joinBtn" class="bg-green-600 hover:bg-green-700 px-6 py-2 rounded-r-lg font-semibold transition">
+                            Join Room
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="roomDisplay" class="hidden">
+                <p class="text-sm text-gray-400 mb-2">Share this Room ID with your friend:</p>
+                <div class="flex items-center justify-center gap-2">
+                    <code id="roomIdValue" class="bg-gray-900 px-4 py-2 rounded border border-gray-600 text-blue-400 font-mono text-lg"></code>
+                    <button id="copyBtn" class="bg-gray-700 hover:bg-gray-600 p-2 rounded transition">
+                        Copy
+                    </button>
+                </div>
+                <div class="flex flex-col items-center mt-4">
+                    <p id="statusText" class="text-yellow-500 animate-pulse">Waiting for partner...</p>
+                    <button id="hangupBtn" class="mt-4 bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg font-semibold transition hidden">
+                        End Call
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global state
+        let peer = null;
+        let localStream = null;
+        let db = null;
+        let auth = null;
+        let currentRoomId = null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'vdocall-123';
+
+        const localVideo = document.getElementById('localVideo');
+        const remoteVideo = document.getElementById('remoteVideo');
+        const statusText = document.getElementById('statusText');
+        const hangupBtn = document.getElementById('hangupBtn');
+
+        async function init() {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                localVideo.srcObject = localStream;
+            } catch (e) {
+                console.error("Camera access denied", e);
+                alert("Please allow camera access to use this app.");
+                return;
+            }
+
+            const firebaseConfig = JSON.parse(__firebase_config);
+            const app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+
+            await signInAnonymously(auth);
+
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    setupEventListeners();
+                }
+            });
+        }
+
+        function setupEventListeners() {
+            document.getElementById('createBtn').onclick = createRoom;
+            document.getElementById('joinBtn').onclick = () => {
+                const id = document.getElementById('roomInput').value.trim();
+                if (id) joinRoom(id);
+            };
+            document.getElementById('copyBtn').onclick = copyRoomId;
+            hangupBtn.onclick = hangup;
+        }
+
+        function copyRoomId() {
+            const text = document.getElementById('roomIdValue').innerText;
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+        }
+
+        async function createRoom() {
+            currentRoomId = Math.random().toString(36).substring(2, 8).toUpperCase();
+            const roomRef = doc(db, 'artifacts', appId, 'public', 'data', 'rooms', currentRoomId);
+
+            document.getElementById('initialActions').classList.add('hidden');
+            document.getElementById('roomDisplay').classList.remove('hidden');
+            document.getElementById('roomIdValue').innerText = currentRoomId;
+
+            peer = new SimplePeer({ initiator: true, trickle: false, stream: localStream });
+
+            peer.on('signal', async (data) => {
+                await setDoc(roomRef, { offer: JSON.stringify(data), status: 'open' });
+            });
+
+            setupPeerEvents(peer);
+
+            onSnapshot(roomRef, (snapshot) => {
+                const data = snapshot.data();
+                if (data?.answer && !peer.connected) {
+                    peer.signal(JSON.parse(data.answer));
+                }
+                if (!data && peer.connected) {
+                    hangup(); // Room deleted by other side
+                }
+            }, (err) => console.error(err));
+        }
+
+        async function joinRoom(roomId) {
+            currentRoomId = roomId;
+            const roomRef = doc(db, 'artifacts', appId, 'public', 'data', 'rooms', roomId);
+            const roomSnap = await getDoc(roomRef);
+
+            if (!roomSnap.exists()) {
+                alert("Room not found!");
+                return;
+            }
+
+            document.getElementById('initialActions').classList.add('hidden');
+            document.getElementById('roomDisplay').classList.remove('hidden');
+            document.getElementById('roomIdValue').innerText = roomId;
+            statusText.innerText = "Joining...";
+
+            const roomData = roomSnap.data();
+            peer = new SimplePeer({ initiator: false, trickle: false, stream: localStream });
+
+            peer.on('signal', async (data) => {
+                await updateDoc(roomRef, { answer: JSON.stringify(data), status: 'active' });
+            });
+
+            setupPeerEvents(peer);
+
+            peer.signal(JSON.parse(roomData.offer));
+            
+            onSnapshot(roomRef, (snapshot) => {
+                if (!snapshot.exists() && peer.connected) {
+                    hangup();
+                }
+            });
+        }
+
+        function setupPeerEvents(p) {
+            p.on('stream', stream => {
+                remoteVideo.srcObject = stream;
+                statusText.innerText = "Connected!";
+                statusText.classList.remove('text-yellow-500', 'animate-pulse');
+                statusText.classList.add('text-green-500');
+                hangupBtn.classList.remove('hidden');
+            });
+
+            p.on('close', () => hangup());
+            p.on('error', err => console.error('Peer error:', err));
+        }
+
+        async function hangup() {
+            if (peer) {
+                peer.destroy();
+                peer = null;
+            }
+            if (currentRoomId) {
+                const roomRef = doc(db, 'artifacts', appId, 'public', 'data', 'rooms', currentRoomId);
+                await deleteDoc(roomRef).catch(() => {});
+                currentRoomId = null;
+            }
+            
+            remoteVideo.srcObject = null;
+            statusText.innerText = "Call ended.";
+            statusText.classList.remove('text-green-500');
+            statusText.classList.add('text-red-500');
+            hangupBtn.classList.add('hidden');
+            
+            setTimeout(() => {
+                location.reload(); // Reset UI for next call
+            }, 2000);
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
